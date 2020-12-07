@@ -1,5 +1,6 @@
 package com.apollo.course.controller;
 
+import com.apollo.course.model.Course;
 import com.apollo.course.model.Share;
 import com.apollo.course.service.CourseService;
 import com.apollo.course.service.user.UserService;
@@ -8,10 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import com.apollo.course.model.Course;
-
-import javax.validation.constraints.NotNull;
-import java.util.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,28 +17,6 @@ public class CourseController {
 
     private final CourseService courseService;
     private final UserService userService;
-    private final static Random random = new Random();
-
-    private String getRandomEle(@NotNull List<String> list) {
-        return list.get(random.nextInt(list.size()));
-    }
-
-    @GetMapping
-    public Mono<Course> createUser() {
-        final List<String> names = Arrays.asList("Idea101" , "Arabic99" , "English101" , "CS11435" , "CS50");
-        final List<String> ids = new ArrayList<>();
-        for(int i = 0 ; i < random.nextInt(100) ; ++i) ids.add(UUID.randomUUID().toString());
-        Course course = new Course();
-        course.setCourseName(getRandomEle(names));
-        course.setCourseType("Educational");
-        HashSet<String> owners = new HashSet<>();
-        HashSet<String> members = new HashSet<>();
-        for(int i = 0 ; i < random.nextInt(10) ; ++i) owners.add(getRandomEle(ids));
-        for(int i = 0 ; i < random.nextInt(10) ; ++i) members.add(getRandomEle(ids));
-        course.setCourseOwners(owners);
-        course.setCourseMembers(members);
-        return this.courseService.saveCourse(Mono.just(course));
-    }
 
     @GetMapping(value = "/{courseId}" , produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Mono<Course> getCourseById(@PathVariable("courseId") String courseId) {
