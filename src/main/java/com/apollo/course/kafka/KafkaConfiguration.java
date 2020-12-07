@@ -29,17 +29,16 @@ import java.util.Properties;
 public class KafkaConfiguration {
 
     @Value("${course.kafka.server}")
-    private String bootstrapServer;
+    String bootstrapServer;
     @Value("${course.kafka.topic}")
-    private String topicName;
-    @Value("${course.kafka.partition}")
-    private Integer numberOfPartitions;
+    String topicName;
+    @Value("${course.kafka.partitions}")
+    Integer numberOfPartitions;
     @Value("${course.kafka.replicas}")
-    private Short numberOfReplicas;
+    Short numberOfReplicas;
 
     @Bean
     NewTopic createCourseTopic() {
-        //return new NewTopic(this.topicName , this.numberOfPartitions , this.numberOfReplicas);
         return TopicBuilder
                 .name(this.topicName)
                 .partitions(this.numberOfPartitions)

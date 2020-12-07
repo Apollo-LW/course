@@ -38,13 +38,9 @@ public class KafkaService {
         this.courseEventPublisher.connect();
     }
 
-    public Mono<Optional<Course>> sendCourseRecord(Mono<Course> course) {
-        return this.sendCourseRecord(course , false);
-    }
-
-    public Mono<Optional<Course>> sendCourseRecord(Mono<Course> courseMono , boolean flag) {
+    public Mono<Optional<Course>> sendCourseRecord(Mono<Course> courseMono) {
         return courseMono.flatMap(course -> this.courseKafkaSender
-                .send(Mono.just(SenderRecord.create(new ProducerRecord<String , Course>(this.topicName , course.getCourseId() , flag ? null : course) , 1)))
+                .send(Mono.just(SenderRecord.create(new ProducerRecord<String , Course>(this.topicName , course.getCourseId() , course) , 1)))
                 .next()
                 .doOnNext(log::info)
                 .map(integerSenderResult -> integerSenderResult.exception() == null ? Optional.of(course) : Optional.empty()));

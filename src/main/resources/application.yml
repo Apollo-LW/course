@@ -1,0 +1,24 @@
+user:
+  kafka:
+    store: course-user-store
+
+course:
+  kafka:
+    server: localhost:9092
+    topic: course
+    replicas: 3
+    partitions: 3
+    store: course-state-store
+
+spring:
+  cloud:
+    stream:
+      kafka:
+        streams:
+          binder:
+            application-id: apollo-course
+      function:
+        definition: courseProcessor
+        bindings:
+          courseProcessor-in-0.destination: course
+          courseProcessor-out-0.destination: course-state
