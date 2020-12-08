@@ -1,7 +1,7 @@
 package com.apollo.course.controller;
 
 import com.apollo.course.model.Course;
-import com.apollo.course.model.Share;
+import com.apollo.course.model.ModifyCourse;
 import com.apollo.course.service.CourseService;
 import com.apollo.course.service.user.UserService;
 import lombok.RequiredArgsConstructor;
@@ -28,19 +28,23 @@ public class CourseController {
         return this.userService.getUserCourses(userId);
     }
 
-    @PostMapping(value = "/" , produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE , consumes = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Course> createCourse(@RequestBody Mono<Course> courseMono) {
         return this.courseService.saveCourse(courseMono);
     }
 
-    @PutMapping(value = "/" , produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public Mono<Course> updateCourse(@RequestBody Mono<Course> courseMono) {
+    @PutMapping(value = "/")
+    public Mono<Boolean> updateCourse(@RequestBody Mono<Course> courseMono) {
         return this.courseService.updateCourse(courseMono);
     }
 
     @PutMapping("/share/{flag}")
-    public Mono<Boolean> shareCourse(@PathVariable("flag") boolean flag , @RequestBody Mono<Share> shareMono) {
+    public Mono<Boolean> shareCourse(@PathVariable("flag") Boolean flag , @RequestBody Mono<ModifyCourse> shareMono) {
         return this.courseService.shareCourse(shareMono , flag);
     }
 
+    @DeleteMapping("")
+    public Mono<Boolean> deleteCourse(@RequestBody Mono<ModifyCourse> modifyCourseMono) {
+        return this.courseService.deleteCourse(modifyCourseMono);
+    }
 }

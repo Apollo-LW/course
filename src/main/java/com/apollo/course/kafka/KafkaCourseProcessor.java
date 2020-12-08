@@ -18,7 +18,9 @@ public class KafkaCourseProcessor {
 
     @Bean
     public Function<KStream<String , Course> , KTable<String , Course>> courseProcessor() {
-        return courseRecord -> courseRecord.groupByKey().reduce((course , updatedCourse) -> updatedCourse , Materialized.as(this.courseStateStoreName));
+        return courseRecord -> courseRecord
+                .groupByKey()
+                .reduce((course , updatedCourse) -> updatedCourse , Materialized.as(this.courseStateStoreName));
     }
 
 }

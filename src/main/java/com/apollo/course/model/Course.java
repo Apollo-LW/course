@@ -2,28 +2,24 @@ package com.apollo.course.model;
 
 import lombok.Data;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.UUID;
+import java.util.*;
 
 @Data
 public class Course {
 
-    private String courseId , courseName , courseType;
-    private Date courseDateOfCreation;
-    private boolean isPublic , isActive;
-    private HashSet<String> courseOwners, courseMembers;
-    private HashSet<Lecture> courseLectures;
+    private String courseId =  UUID.randomUUID().toString();
+    private Date courseDateOfCreation = Calendar.getInstance().getTime();
+    private boolean isPublic, isActive = true;
+    private HashSet<String> courseOwners = new HashSet<>() , courseMembers = new HashSet<>();
+    private HashSet<Lecture> courseLectures = new HashSet<>();
+    private String courseName = this.courseId + '-' + this.courseDateOfCreation , courseType;
 
-    public Course() {
-        this.isActive = true;
-        this.courseOwners = new HashSet<>();
-        this.courseMembers = new HashSet<>();
-        this.courseLectures = new HashSet<>();
-        this.courseId = UUID.randomUUID().toString();
-        this.courseDateOfCreation = Calendar.getInstance().getTime();
-        this.courseName = this.courseId + '-' + this.courseDateOfCreation;
+    public void addMember(List<String> membersIds) {
+        this.courseMembers.addAll(membersIds);
+    }
+
+    public void addOwners(List<String> ownersIds) {
+        this.courseOwners.addAll(ownersIds);
     }
 
 }
