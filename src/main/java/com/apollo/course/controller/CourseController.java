@@ -28,7 +28,7 @@ public class CourseController {
         return this.userService.getUserCourses(userId);
     }
 
-    @PostMapping(value = "/" , produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    @PostMapping(produces = MediaType.TEXT_EVENT_STREAM_VALUE , consumes = MediaType.APPLICATION_JSON_VALUE)
     public Mono<Course> createCourse(@RequestBody Mono<Course> courseMono) {
         return this.courseService.saveCourse(courseMono);
     }
@@ -39,7 +39,7 @@ public class CourseController {
     }
 
     @PutMapping("/share/{flag}")
-    public Mono<Boolean> shareCourse(@PathVariable("flag") boolean flag , @RequestBody Mono<ModifyCourse> shareMono) {
+    public Mono<Boolean> shareCourse(@PathVariable("flag") Boolean flag , @RequestBody Mono<ModifyCourse> shareMono) {
         return this.courseService.shareCourse(shareMono , flag);
     }
 

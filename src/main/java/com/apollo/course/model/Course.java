@@ -1,44 +1,18 @@
 package com.apollo.course.model;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 import java.util.*;
 
+@Data
 public class Course {
 
-    @Getter
-    private String courseId;
-    @Getter
-    @Setter
-    private String courseName, courseType;
-    @Getter
-    @Setter
-    private Date courseDateOfCreation;
-    @Getter
-    @Setter
-    private boolean isPublic, isActive;
-    @Getter
-    @Setter
-    private HashSet<String> courseOwners, courseMembers;
-    @Getter
-    @Setter
-    private HashSet<Lecture> courseLectures;
-
-    public Course() {
-        
-    }
-
-    public Course(List<String> ownerId) {
-        this.isActive = true;
-        this.courseOwners = new HashSet<>();
-        courseOwners.addAll(ownerId);
-        this.courseMembers = new HashSet<>();
-        this.courseLectures = new HashSet<>();
-        this.courseId = UUID.randomUUID().toString();
-        this.courseDateOfCreation = Calendar.getInstance().getTime();
-        this.courseName = this.courseId + '-' + this.courseDateOfCreation;
-    }
+    private String courseId =  UUID.randomUUID().toString();
+    private Date courseDateOfCreation = Calendar.getInstance().getTime();
+    private boolean isPublic, isActive = true;
+    private HashSet<String> courseOwners = new HashSet<>() , courseMembers = new HashSet<>();
+    private HashSet<Lecture> courseLectures = new HashSet<>();
+    private String courseName = this.courseId + '-' + this.courseDateOfCreation , courseType;
 
     public void addMember(List<String> membersIds) {
         this.courseMembers.addAll(membersIds);

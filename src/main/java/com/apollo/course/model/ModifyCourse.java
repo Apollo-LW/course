@@ -2,12 +2,12 @@ package com.apollo.course.model;
 
 import lombok.Data;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 @Data
 public class ModifyCourse {
 
     private String ownerId , courseId;
-    private ArrayList<String> userIds = new ArrayList<>();
+    private HashSet<String> userIds = new HashSet<>();
 
 }
