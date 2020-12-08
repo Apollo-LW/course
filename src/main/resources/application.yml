@@ -9,6 +9,16 @@ course:
     replicas: 3
     partitions: 3
     store: course-state-store
+    retention: -1
+    acks: all
+    retries: 10
+    requestimeout: 5000
+    batch: 163850
+    linger: 100
+    max-in-flight: 1
+    client-id: apollo-course
+    group-id: apollo-course-group
+    offset: latest
 
 spring:
   cloud:

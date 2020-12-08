@@ -1,0 +1,93 @@
+{
+  "properties": [
+    {
+      "name": "course.kafka.server",
+      "type": "java.lang.String",
+      "defaultValue": "localhost:9092",
+      "description": "Kafka Bootstrap Server URL."
+    },
+    {
+      "name": "course.kafka.topic",
+      "type": "java.lang.String",
+      "defaultValue": "course",
+      "description": "The name of the course topic."
+    },
+    {
+      "name": "course.kafka.replicas",
+      "type": "java.lang.Short",
+      "defaultValue": 3,
+      "description": "Number of replicas for the course topic."
+    },
+    {
+      "name": "course.kafka.partitions",
+      "type": "java.lang.Integer",
+      "defaultValue": 3,
+      "description": "Description for course.kafka.partitions."
+    },
+    {
+      "name": "course.kafka.store",
+      "type": "java.lang.String",
+      "defaultValue": "course-state-store",
+      "description": "Name of the course state store."
+    },
+    {
+      "name": "course.kafka.retention",
+      "type": "java.lang.String",
+      "description": "Retention period for the course topic."
+    },
+    {
+      "name": "course.kafka.acks",
+      "type": "java.lang.String",
+      "description": "Acknowledgement config for the course topic."
+    },
+    {
+      "name": "course.kafka.retries",
+      "type": "java.lang.Integer",
+      "defaultValue": 10,
+      "description": "Number of retries for the producer of course topic."
+    },
+    {
+      "name": "course.kafka.requestimeout",
+      "type": "java.lang.String",
+      "description": "Request timeout for the producer of course topic."
+    },
+    {
+      "name": "course.kafka.batch",
+      "type": "java.lang.String",
+      "description": "The batch size for the producer of course topic."
+    },
+    {
+      "name": "course.kafka.linger",
+      "type": "java.lang.String",
+      "description": "Linger for the producer of course topic."
+    },
+    {
+      "name": "course.kafka.max-in-flight",
+      "type": "java.lang.String",
+      "description": "Max in flight config for the course topic."
+    },
+    {
+      "name": "course.kafka.client-id",
+      "type": "java.lang.String",
+      "defaultValue": "apollo-course",
+      "description": "Client Id for the course receiver."
+    },
+    {
+      "name": "course.kafka.group-id",
+      "type": "java.lang.String",
+      "defaultValue": "apollo-course-group",
+      "description": "Group Id for the course receiver."
+    },
+    {
+      "name": "course.kafka.offset",
+      "type": "java.lang.String",
+      "description": "Offset config for the course receiver."
+    },
+    {
+      "name": "user.kafka.store",
+      "type": "java.lang.String",
+      "defaultValue": "user-state-store",
+      "description": "The name of the user state store."
+    }
+  ]
+}
