@@ -1,13 +1,13 @@
 user:
   kafka:
-    store: course-user-state-store
+    store: course-user-store
 
 course:
   kafka:
     server: localhost:9092
     topic: course
-    replicas: 1
-    partitions: 1
+    replicas: 3
+    partitions: 3
     store: course-state-store
     retention: -1
     acks: all
@@ -22,16 +22,13 @@ course:
 
 spring:
   cloud:
-    function:
-      definition: courseProcessor;
     stream:
       kafka:
         streams:
           binder:
             application-id: apollo-course
-      bindings:
-        courseProcessor-in-0.destination: course
-        courseProcessor-out-0.destination: course-state-store
-
-server:
-  port: 8081
+      function:
+        definition: courseProcessor
+        bindings:
+          courseProcessor-in-0.destination: course
+          courseProcessor-out-0.destination: course-state
