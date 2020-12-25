@@ -1,9 +1,9 @@
-package com.apollo.course.service;
+package com.apollo.course.service.impl;
 
 import com.apollo.course.kafka.KafkaService;
 import com.apollo.course.model.Course;
 import com.apollo.course.model.ModifyCourse;
-import com.apollo.course.service.user.UserService;
+import com.apollo.course.service.CourseService;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
@@ -22,11 +22,10 @@ public class CourseServiceImpl implements CourseService {
     String courseStateStoreName;
     private final KafkaService kafkaService;
     private final InteractiveQueryService interactiveQueryService;
-    private final UserService userService;
-    private ReadOnlyKeyValueStore<String , Course> courseStateStore;
+    private ReadOnlyKeyValueStore<String, Course> courseStateStore;
 
-    private ReadOnlyKeyValueStore<String , Course> getCourseStateStore() {
-        if(this.courseStateStore == null)
+    private ReadOnlyKeyValueStore<String, Course> getCourseStateStore() {
+        if (this.courseStateStore == null)
             this.courseStateStore = interactiveQueryService.getQueryableStore(this.courseStateStoreName , QueryableStoreTypes.keyValueStore());
         return this.courseStateStore;
     }
@@ -34,7 +33,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Mono<Course> getCourseById(String courseId) {
         Optional<Course> courseOptional = Optional.ofNullable(this.getCourseStateStore().get(courseId));
-        if(courseOptional.isEmpty()) return Mono.empty();
+        if (courseOptional.isEmpty()) return Mono.empty();
         Course course = courseOptional.get();
         return course.isActive() ? Mono.just(course) : Mono.empty();
     }
@@ -64,10 +63,10 @@ public class CourseServiceImpl implements CourseService {
     public Mono<Boolean> shareCourse(Mono<ModifyCourse> modifyCourseMono , boolean flag) {
         return modifyCourseMono.flatMap(modifyCourse -> {
             Optional<Course> courseOptional = Optional.ofNullable(this.getCourseStateStore().get(modifyCourse.getCourseId()));
-            if(courseOptional.isEmpty()) return Mono.just(false);
+            if (courseOptional.isEmpty()) return Mono.just(false);
             return Mono.just(courseOptional.get()).flatMap(updatedCourse -> {
-                if(!updatedCourse.getCourseOwners().contains(modifyCourse.getOwnerId())) return Mono.just(false);
-                if(flag) updatedCourse.getCourseMembers().removeAll(modifyCourse.getUserIds());
+                if (!updatedCourse.getCourseOwners().contains(modifyCourse.getOwnerId())) return Mono.just(false);
+                if (flag) updatedCourse.getCourseMembers().removeAll(modifyCourse.getUserIds());
                 else updatedCourse.getCourseMembers().addAll(modifyCourse.getUserIds());
                 return this.kafkaService.sendCourseRecord(Mono.just(updatedCourse)).map(Optional::isPresent);
             });
@@ -78,7 +77,7 @@ public class CourseServiceImpl implements CourseService {
     public Mono<Boolean> deleteCourse(Mono<ModifyCourse> modifyCourseMono) {
         return modifyCourseMono.flatMap(modifyCourse -> {
             Optional<Course> courseOptional = Optional.ofNullable(this.getCourseStateStore().get(modifyCourse.getCourseId()));
-            if(courseOptional.isEmpty()) return Mono.just(false);
+            if (courseOptional.isEmpty()) return Mono.just(false);
             return Mono.just(courseOptional.get()).flatMap(course -> {
                 if (!course.getCourseOwners().contains(modifyCourse.getOwnerId())) return Mono.just(false);
                 course.setActive(false);
