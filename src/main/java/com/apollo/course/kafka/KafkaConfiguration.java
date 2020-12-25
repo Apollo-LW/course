@@ -1,5 +1,6 @@
 package com.apollo.course.kafka;
 
+import com.apollo.course.model.Course;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -21,6 +22,7 @@ import reactor.kafka.sender.SenderOptions;
 import reactor.kafka.sender.internals.DefaultKafkaSender;
 import reactor.kafka.sender.internals.ProducerFactory;
 
+import java.util.Collections;
 import java.util.Properties;
 
 @Configuration
@@ -66,31 +68,33 @@ public class KafkaConfiguration {
     }
 
     @Bean
-    KafkaSender courseKafkaSender() {
-        final Properties senderProperties = new Properties();
-        senderProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG , this.bootstrapServer);
-        senderProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG , StringSerializer.class);
-        senderProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG , JsonSerializer.class);
-        senderProperties.put(ProducerConfig.ACKS_CONFIG , this.acks);
-        senderProperties.put(ProducerConfig.RETRIES_CONFIG , this.numberOfRetries);
-        senderProperties.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG , this.requestTimeout);
-        senderProperties.put(ProducerConfig.BATCH_SIZE_CONFIG , this.batchSize);
-        senderProperties.put(ProducerConfig.LINGER_MS_CONFIG , this.linger);
-        senderProperties.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION , this.maxInFlight);
+    KafkaSender<String, Course> courseKafkaSender() {
+        final Properties courseSenderProperties = new Properties();
+        courseSenderProperties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG , this.bootstrapServer);
+        courseSenderProperties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG , StringSerializer.class);
+        courseSenderProperties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG , JsonSerializer.class);
+        courseSenderProperties.put(ProducerConfig.ACKS_CONFIG , this.acks);
+        courseSenderProperties.put(ProducerConfig.RETRIES_CONFIG , this.numberOfRetries);
+        courseSenderProperties.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG , this.requestTimeout);
+        courseSenderProperties.put(ProducerConfig.BATCH_SIZE_CONFIG , this.batchSize);
+        courseSenderProperties.put(ProducerConfig.LINGER_MS_CONFIG , this.linger);
+        courseSenderProperties.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION , this.maxInFlight);
 
-        return new DefaultKafkaSender<>(ProducerFactory.INSTANCE , SenderOptions.create(senderProperties));
+        return new DefaultKafkaSender<>(ProducerFactory.INSTANCE , SenderOptions.create(courseSenderProperties));
     }
 
     @Bean
-    KafkaReceiver courseKafkaReceiver() {
-        final Properties receiverProperties = new Properties();
-        receiverProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG , this.bootstrapServer);
-        receiverProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG , StringDeserializer.class);
-        receiverProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG , JsonDeserializer.class);
- 
-        receiverProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG , true);
-        receiverProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG , this.offsetConfig);
+    KafkaReceiver<String, Course> courseKafkaReceiver() {
+        final Properties courseReceiverProperties = new Properties();
+        courseReceiverProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG , this.bootstrapServer);
+        courseReceiverProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG , StringDeserializer.class);
+        courseReceiverProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG , JsonDeserializer.class);
+        courseReceiverProperties.put(ConsumerConfig.CLIENT_ID_CONFIG , this.clientId);
+        courseReceiverProperties.put(ConsumerConfig.GROUP_ID_CONFIG , this.groupId);
+        courseReceiverProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG , true);
+        courseReceiverProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG , this.offsetConfig);
 
-        return new DefaultKafkaReceiver<>(ConsumerFactory.INSTANCE , ReceiverOptions.create(receiverProperties));
+        ReceiverOptions<String, Course> courseReceiverOptions = ReceiverOptions.create(courseReceiverProperties);
+        return new DefaultKafkaReceiver<>(ConsumerFactory.INSTANCE , courseReceiverOptions.subscription(Collections.singleton(this.topicName)));
     }
 }
