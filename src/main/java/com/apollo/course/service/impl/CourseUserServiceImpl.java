@@ -2,7 +2,7 @@ package com.apollo.course.service.impl;
 
 import com.apollo.course.model.Course;
 import com.apollo.course.model.CourseUser;
-import com.apollo.course.service.UserService;
+import com.apollo.course.service.CourseUserService;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.streams.state.QueryableStoreTypes;
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore;
@@ -13,7 +13,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService {
+public class CourseUserServiceImpl implements CourseUserService {
 
     @Value("${user.kafka.store}")
     private String courseUserStateStoreName;

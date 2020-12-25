@@ -1,7 +1,7 @@
 package com.apollo.course.controller;
 
 import com.apollo.course.model.Course;
-import com.apollo.course.service.UserService;
+import com.apollo.course.service.CourseUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,13 +12,13 @@ import reactor.core.publisher.Flux;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/course/user")
-public class UserController {
+public class CourseUserController {
 
-    private final UserService userService;
+    private final CourseUserService courseUserService;
 
     @GetMapping("/{userId}")
     public Flux<Course> getUserCourse(@PathVariable("userId") String userId) {
-        return this.userService.getUserCourses(userId);
+        return this.courseUserService.getUserCourses(userId);
     }
 
 }
