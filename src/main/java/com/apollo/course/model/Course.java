@@ -14,18 +14,18 @@ public class Course {
     private HashSet<String> courseOwners = new HashSet<>() , courseMembers = new HashSet<>();
     private String courseName = this.courseId + '-' + this.courseDateOfCreation , courseType;
 
-    public Course addMember(List<String> membersIds) {
-        this.courseMembers.addAll(membersIds);
+    public Course addMember(String membersId) {
+        this.courseMembers.add(membersId);
         return this;
     }
 
-    public Course addOwners(List<String> ownersIds) {
-        this.courseOwners.addAll(ownersIds);
+    public Course addOwners(String ownersId) {
+        this.courseOwners.add(ownersId);
         return this;
     }
 
-    public Course addChapter(List<Chapter> chapters) {
-        this.courseChapters.addAll(chapters);
+    public Course addChapter(Chapter chapters) {
+        this.courseChapters.add(chapters);
         return this;
     }
 

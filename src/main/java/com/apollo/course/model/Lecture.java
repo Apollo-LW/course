@@ -11,7 +11,6 @@ public class Lecture {
     private String ownerId;
     private boolean isPublic , isActive = true;
     private String lectureId = UUID.randomUUID().toString();
-    private HashSet<String> lectureVideos = new HashSet<>();
-    private HashSet<String> lectureDocuments = new HashSet<>();
+    private HashSet<Resource> lectureResources = new HashSet<>();
 
 }

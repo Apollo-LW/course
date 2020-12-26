@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.HashSet;
 
 @Data
-public class ModifyCourse {
+public class ShareCourse {
 
     private String ownerId , courseId;
     private HashSet<String> userIds = new HashSet<>();
