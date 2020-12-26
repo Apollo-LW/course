@@ -1,6 +1,5 @@
 package com.apollo.course.service;
 
-import com.apollo.course.model.Chapter;
 import com.apollo.course.model.Course;
 import com.apollo.course.model.ShareCourse;
 import reactor.core.publisher.Flux;
@@ -17,6 +16,5 @@ public interface CourseService {
     Mono<Boolean> deleteCourse(Mono<ShareCourse> modifyCourseMono);
     Mono<Boolean> addMembers(Flux<String> membersIds , String courseId , String ownerId);
     Mono<Boolean> addOwners(Flux<String> ownersIds , String courseId , String ownerId);
-    Mono<Boolean> addChapter(Mono<Chapter> chapterMono , String courseId , String ownerId);
 
 }

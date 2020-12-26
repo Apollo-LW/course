@@ -1,5 +1,6 @@
 package com.apollo.course.kafka;
 
+import com.apollo.course.model.Chapter;
 import com.apollo.course.model.Course;
 import com.apollo.course.model.CourseUser;
 import org.apache.kafka.common.serialization.Serde;
@@ -22,6 +23,12 @@ public class CustomSerdes {
         }
     }
 
+    static public final class CourseChapterSerde extends Serdes.WrapperSerde<Chapter> {
+        public CourseChapterSerde() {
+            super(new JsonSerializer<>() , new JsonDeserializer<>(Chapter.class));
+        }
+    }
+
     @Contract(" -> new")
     public static Serde<Course> courseSerde() {
         return new CustomSerdes.CourseSerde();
@@ -30,5 +37,10 @@ public class CustomSerdes {
     @Contract(" -> new")
     public static Serde<CourseUser> courseUserSerde() {
         return new CustomSerdes.CourseUserSerde();
+    }
+
+    @Contract(" -> new")
+    public static Serde<Chapter> chapterSerde() {
+        return new CustomSerdes.CourseChapterSerde();
     }
 }

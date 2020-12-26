@@ -1,7 +1,6 @@
 package com.apollo.course.service.impl;
 
 import com.apollo.course.kafka.KafkaService;
-import com.apollo.course.model.Chapter;
 import com.apollo.course.model.Course;
 import com.apollo.course.model.ShareCourse;
 import com.apollo.course.service.CourseService;
@@ -92,8 +91,7 @@ public class CourseServiceImpl implements CourseService {
             if (courseOptional.isEmpty()) return Mono.just(false);
             Course course = courseOptional.get();
             if (!course.getCourseOwners().contains(ownerId)) return Mono.just(false);
-            course.addMember(memberId);
-            return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
+            return this.kafkaService.sendCourseRecord(Mono.just(course.addMember(memberId))).map(Optional::isPresent);
         }).all(flag -> flag);
     }
 
@@ -104,21 +102,7 @@ public class CourseServiceImpl implements CourseService {
             if (courseOptional.isEmpty()) return Mono.just(false);
             Course course = courseOptional.get();
             if (!course.getCourseOwners().contains(ownerId)) return Mono.just(false);
-            course.addOwners(ownerId);
-            return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
+            return this.kafkaService.sendCourseRecord(Mono.just(course.addOwners(ownerId))).map(Optional::isPresent);
         }).all(flag -> flag);
     }
-
-    @Override
-    public Mono<Boolean> addChapter(Mono<Chapter> chapterMono , String courseId , String ownerId) {
-        return chapterMono.flatMap(chapter -> {
-            Optional<Course> courseOptional = Optional.ofNullable(this.getCourseStateStore().get(courseId));
-            if (courseOptional.isEmpty()) return Mono.empty();
-            return Mono.just(courseOptional.get()).flatMap(course -> {
-                if (!course.getCourseOwners().contains(ownerId)) return Mono.just(false);
-                return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
-            });
-        });
-    }
-
 }
