@@ -1,5 +1,6 @@
 package com.apollo.course.kafka;
 
+import com.apollo.course.model.Chapter;
 import com.apollo.course.model.Course;
 import com.apollo.course.model.CourseUser;
 import org.apache.kafka.common.serialization.Serdes;
@@ -22,6 +23,8 @@ public class CourseProcessors {
     private String courseStateStoreName;
     @Value("${user.kafka.store}")
     private String courseUserStateStoreName;
+    @Value("${chapter.kafka.store}")
+    private String courseChapterStateStoreName;
 
     @Bean
     public Function<KStream<String, Course>, KTable<String, Course>> courseProcessor() {
@@ -33,9 +36,11 @@ public class CourseProcessors {
                     .toStream()
                     .groupByKey(Grouped.with(Serdes.String() , CustomSerdes.courseUserSerde()))
                     .reduce((courseUser , updatedCourseUser) -> updatedCourseUser , Materialized.as(this.courseUserStateStoreName));
-            return courseKStream
-                    .groupByKey()
-                    .reduce((course , updatedCourse) -> updatedCourse , Materialized.as(this.courseStateStoreName));
+            courseKStream
+                    .flatMap((courseId , course) -> course.getCourseChapters().stream().map(chapter -> new KeyValue<String , Chapter>(chapter.getChapterId() , chapter)).collect(Collectors.toSet()))
+                    .groupByKey(Grouped.with(Serdes.String() , CustomSerdes.chapterSerde()))
+                    .reduce((chapter , updatedChapter) -> updatedChapter , Materialized.as(this.courseChapterStateStoreName));
+            return courseKStream.groupByKey().reduce((course , updatedCourse) -> updatedCourse , Materialized.as(this.courseStateStoreName));
         };
     }
 }
