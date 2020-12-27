@@ -29,7 +29,9 @@ public class KafkaConfiguration {
     @Value("${course.kafka.server}")
     private String bootstrapServer;
     @Value("${course.kafka.topic}")
-    private String topicName;
+    private String courseTopicName;
+    @Value("${course.kafka.enroll.topic}")
+    private String courseEnrollTopicName;
     @Value("${course.kafka.partitions}")
     private Integer numberOfPartitions;
     @Value("${course.kafka.replicas}")
@@ -58,7 +60,17 @@ public class KafkaConfiguration {
     @Bean
     NewTopic createCourseTopic() {
         return TopicBuilder
-                .name(this.topicName)
+                .name(this.courseTopicName)
+                .partitions(this.numberOfPartitions)
+                .replicas(this.numberOfReplicas)
+                .config(TopicConfig.RETENTION_MS_CONFIG , this.retentionPeriod)
+                .build();
+    }
+
+    @Bean
+    NewTopic createCourseEnrollmentTopic() {
+        return TopicBuilder
+                .name(this.courseTopicName)
                 .partitions(this.numberOfPartitions)
                 .replicas(this.numberOfReplicas)
                 .config(TopicConfig.RETENTION_MS_CONFIG , this.retentionPeriod)
@@ -87,7 +99,6 @@ public class KafkaConfiguration {
         receiverProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG , this.bootstrapServer);
         receiverProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG , StringDeserializer.class);
         receiverProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG , JsonDeserializer.class);
- 
         receiverProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG , true);
         receiverProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG , this.offsetConfig);
 

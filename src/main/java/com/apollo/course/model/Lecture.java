@@ -13,4 +13,8 @@ public class Lecture {
     private String lectureId = UUID.randomUUID().toString();
     private HashSet<Resource> lectureResources = new HashSet<>();
 
+    public Lecture addResource(Resource resource) {
+        this.lectureResources.add(resource);
+        return this;
+    }
 }
