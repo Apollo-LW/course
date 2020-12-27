@@ -23,6 +23,9 @@ course:
     client-id: apollo-course
     group-id: apollo-course-group
     offset: latest
+    enroll:
+      topic: enroll-request
+      store: enroll-request-store
 
 spring:
   cloud:
@@ -35,6 +38,7 @@ spring:
             application-id: apollo-course
       bindings:
         courseProcessor-in-0.destination: course
+        courseProcessor-in-1.destination: enroll-request
         courseProcessor-out-0.destination: course-state-store
 
 server:

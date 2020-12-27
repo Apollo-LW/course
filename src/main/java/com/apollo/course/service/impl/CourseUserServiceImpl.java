@@ -11,6 +11,8 @@ import org.springframework.cloud.stream.binder.kafka.streams.InteractiveQuerySer
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class CourseUserServiceImpl implements CourseUserService {
@@ -28,6 +30,8 @@ public class CourseUserServiceImpl implements CourseUserService {
 
     @Override
     public Flux<Course> getUserCourses(String userId) {
-        return Flux.fromIterable(this.getCourseUserStateStore().get(userId).getUserCourses());
+        Optional<CourseUser> optionalCourseUser = Optional.ofNullable(this.getCourseUserStateStore().get(userId));
+        if(optionalCourseUser.isEmpty()) return Flux.empty();
+        return Flux.fromIterable(optionalCourseUser.get().getUserCourses());
     }
 }

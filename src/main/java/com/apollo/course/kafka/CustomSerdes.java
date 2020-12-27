@@ -1,8 +1,6 @@
 package com.apollo.course.kafka;
 
-import com.apollo.course.model.Chapter;
-import com.apollo.course.model.Course;
-import com.apollo.course.model.CourseUser;
+import com.apollo.course.model.*;
 import org.apache.kafka.common.serialization.Serde;
 import org.apache.kafka.common.serialization.Serdes;
 import org.jetbrains.annotations.Contract;
@@ -29,6 +27,18 @@ public class CustomSerdes {
         }
     }
 
+    static public final class CourseEnrollmentSerde extends Serdes.WrapperSerde<CourseEnrollment> {
+        public CourseEnrollmentSerde() {
+            super(new JsonSerializer<>() , new JsonDeserializer<>(CourseEnrollment.class));
+        }
+    }
+
+    static public final class CourseEnrollmentRequestSerde extends Serdes.WrapperSerde<CourseEnrollmentRequest> {
+        public CourseEnrollmentRequestSerde() {
+            super(new JsonSerializer<>() , new JsonDeserializer<>(CourseEnrollmentRequest.class));
+        }
+    }
+
     @Contract(" -> new")
     public static Serde<Course> courseSerde() {
         return new CustomSerdes.CourseSerde();
@@ -42,5 +52,15 @@ public class CustomSerdes {
     @Contract(" -> new")
     public static Serde<Chapter> chapterSerde() {
         return new CustomSerdes.CourseChapterSerde();
+    }
+
+    @Contract(" -> new")
+    public static Serde<CourseEnrollment> courseEnrollmentSerde() {
+        return new CustomSerdes.CourseEnrollmentSerde();
+    }
+
+    @Contract(" -> new")
+    public static Serde<CourseEnrollmentRequest> courseEnrollmentRequestSerde() {
+        return new CustomSerdes.CourseEnrollmentRequestSerde();
     }
 }

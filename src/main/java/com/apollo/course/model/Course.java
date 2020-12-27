@@ -8,11 +8,24 @@ import java.util.*;
 public class Course {
 
     private boolean isPublic, isActive = true;
+    private EnrollmentType courseEnrollmentType;
     private String courseId =  UUID.randomUUID().toString();
     private HashSet<Chapter> courseChapters = new HashSet<>();
     private Date courseDateOfCreation = Calendar.getInstance().getTime();
     private HashSet<String> courseOwners = new HashSet<>() , courseMembers = new HashSet<>();
     private String courseName = this.courseId + '-' + this.courseDateOfCreation , courseType;
+
+    public boolean hasOwner(String ownerId) {
+        return this.courseOwners.contains(ownerId);
+    }
+
+    public Optional<Chapter> getChapter(Chapter chapter) {
+        return this.courseChapters.stream().filter(chapterTemp -> chapterTemp.getChapterId().equals(chapter.getChapterId())).findFirst();
+    }
+
+    public void removeChapter(Chapter chapter) {
+        this.courseChapters.remove(chapter);
+    }
 
     public Course addMember(String membersId) {
         this.courseMembers.add(membersId);

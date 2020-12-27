@@ -87,7 +87,6 @@ public class KafkaConfiguration {
         receiverProperties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG , this.bootstrapServer);
         receiverProperties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG , StringDeserializer.class);
         receiverProperties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG , JsonDeserializer.class);
- 
         receiverProperties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG , true);
         receiverProperties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG , this.offsetConfig);
 
