@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Optional;
+import java.util.Set;
 
 @RestController
 @RequiredArgsConstructor
@@ -57,13 +58,13 @@ public class CourseController {
     }
 
     @PutMapping("/add/owner/{courseId}/{ownerId}")
-    public Mono<Boolean> addOwnerToCourse(@PathVariable("courseId") String courseId , @PathVariable("ownerId") String ownerId , @RequestBody Flux<String> ownerIds) {
-        return this.courseService.addOwners(ownerIds , courseId , ownerId);
+    public Mono<Boolean> addOwnerToCourse(@PathVariable("courseId") String courseId , @PathVariable("ownerId") String ownerId , @RequestBody Set<String> ownerIds) {
+        return this.courseService.addOwners(Flux.fromIterable(ownerIds) , courseId , ownerId);
     }
 
     @PutMapping("/add/member/{courseId}/{ownerId}")
-    public Mono<Boolean> addMemberToCourse(@PathVariable("courseId") String courseId , @PathVariable("ownerId") String ownerId , @RequestBody Flux<String> membersIds) {
-        return this.courseService.addMembers(membersIds , courseId , ownerId);
+    public Mono<Boolean> addMemberToCourse(@PathVariable("courseId") String courseId , @PathVariable("ownerId") String ownerId , @RequestBody Set<String> membersIds) {
+        return this.courseService.addMembers(Flux.fromIterable(membersIds) , courseId , ownerId);
     }
 
     @PutMapping("/add/chapter/{courseId}/{ownerId}")

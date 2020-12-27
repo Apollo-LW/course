@@ -49,7 +49,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private boolean isNotValid(Optional<Course> optionalCourse , String ownerId) {
-        return optionalCourse.isEmpty() || optionalCourse.get().hasOwner(ownerId);
+        return optionalCourse.isEmpty() || optionalCourse.get().doesNotHaveOwner(ownerId);
     }
 
     @Override
@@ -131,7 +131,7 @@ public class CourseServiceImpl implements CourseService {
             Optional<Course> courseOptional = Optional.ofNullable(this.getCourseStateStore().get(shareCourse.getCourseId()));
             if (courseOptional.isEmpty()) return Mono.just(false);
             return Mono.just(courseOptional.get()).flatMap(updatedCourse -> {
-                if (!updatedCourse.hasOwner(shareCourse.getOwnerId())) return Mono.just(false);
+                if (updatedCourse.doesNotHaveOwner(shareCourse.getOwnerId())) return Mono.just(false);
                 if (flag) updatedCourse.getCourseMembers().removeAll(shareCourse.getUserIds());
                 else updatedCourse.getCourseMembers().addAll(shareCourse.getUserIds());
                 return this.kafkaService.sendCourseRecord(Mono.just(updatedCourse)).map(Optional::isPresent);
@@ -145,7 +145,7 @@ public class CourseServiceImpl implements CourseService {
             Optional<Course> courseOptional = Optional.ofNullable(this.getCourseStateStore().get(shareCourse.getCourseId()));
             if (courseOptional.isEmpty()) return Mono.just(false);
             return Mono.just(courseOptional.get()).flatMap(course -> {
-                if (!course.hasOwner(shareCourse.getOwnerId())) return Mono.just(false);
+                if (course.doesNotHaveOwner(shareCourse.getOwnerId())) return Mono.just(false);
                 course.setActive(false);
                 return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
             });
