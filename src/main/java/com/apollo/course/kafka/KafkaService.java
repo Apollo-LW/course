@@ -1,7 +1,7 @@
 package com.apollo.course.kafka;
 
 import com.apollo.course.model.Course;
-import com.apollo.course.model.CourseEnrollment;
+import com.apollo.course.model.CourseEnrollmentRequest;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ public class KafkaService {
     @Value("${course.kafka.enroll.topic}")
     private String courseEnrollmentTopicName;
     private final KafkaSender<String, Course> courseKafkaSender;
-    private final KafkaSender<String, CourseEnrollment> courseEnrollmentKafkaSender;
+    private final KafkaSender<String, CourseEnrollmentRequest> courseEnrollmentKafkaSender;
 
     public Mono<Optional<Course>> sendCourseRecord(Mono<Course> courseMono) {
         return courseMono.flatMap(course -> this.courseKafkaSender
@@ -30,9 +30,9 @@ public class KafkaService {
                 .map(senderResult -> senderResult.exception() == null ? Optional.of(course) : Optional.empty()));
     }
 
-    public Mono<Boolean> sendEnrollmentRequest(Mono<CourseEnrollment> courseEnrollmentMono) {
+    public Mono<Boolean> sendEnrollmentRequest(Mono<CourseEnrollmentRequest> courseEnrollmentMono) {
         return courseEnrollmentMono.flatMap(courseEnrollment -> this.courseEnrollmentKafkaSender
-                .send(Mono.just(SenderRecord.create(new ProducerRecord<String, CourseEnrollment>(this.courseEnrollmentTopicName , courseEnrollment.getCourseId() , courseEnrollment) , courseEnrollment.getCourseId())))
+                .send(Mono.just(SenderRecord.create(new ProducerRecord<String, CourseEnrollmentRequest>(this.courseEnrollmentTopicName , courseEnrollment.getCourseId() , courseEnrollment) , courseEnrollment.getCourseId())))
                 .next()
                 .map(senderResult -> senderResult.exception() == null)
         );

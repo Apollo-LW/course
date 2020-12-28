@@ -27,15 +27,15 @@ public class CustomSerdes {
         }
     }
 
-    static public final class CourseEnrollmentSerde extends Serdes.WrapperSerde<CourseEnrollment> {
+    static public final class CourseEnrollmentSerde extends Serdes.WrapperSerde<CourseEnrollmentRequest> {
         public CourseEnrollmentSerde() {
-            super(new JsonSerializer<>() , new JsonDeserializer<>(CourseEnrollment.class));
+            super(new JsonSerializer<>() , new JsonDeserializer<>(CourseEnrollmentRequest.class));
         }
     }
 
-    static public final class CourseEnrollmentRequestSerde extends Serdes.WrapperSerde<CourseEnrollmentRequest> {
+    static public final class CourseEnrollmentRequestSerde extends Serdes.WrapperSerde<CourseEnrollment> {
         public CourseEnrollmentRequestSerde() {
-            super(new JsonSerializer<>() , new JsonDeserializer<>(CourseEnrollmentRequest.class));
+            super(new JsonSerializer<>() , new JsonDeserializer<>(CourseEnrollment.class));
         }
     }
 
@@ -55,12 +55,12 @@ public class CustomSerdes {
     }
 
     @Contract(" -> new")
-    public static Serde<CourseEnrollment> courseEnrollmentSerde() {
+    public static Serde<CourseEnrollmentRequest> courseEnrollmentSerde() {
         return new CustomSerdes.CourseEnrollmentSerde();
     }
 
     @Contract(" -> new")
-    public static Serde<CourseEnrollmentRequest> courseEnrollmentRequestSerde() {
+    public static Serde<CourseEnrollment> courseEnrollmentRequestSerde() {
         return new CustomSerdes.CourseEnrollmentRequestSerde();
     }
 }

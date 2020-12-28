@@ -28,7 +28,7 @@ public class CourseServiceImpl implements CourseService {
     private final InteractiveQueryService interactiveQueryService;
     private ReadOnlyKeyValueStore<String, Course> courseStateStore;
     private ReadOnlyKeyValueStore<String, Chapter> chapterStateStore;
-    private ReadOnlyKeyValueStore<String, CourseEnrollmentRequest> courseEnrollmentRequestStateStore;
+    private ReadOnlyKeyValueStore<String, CourseEnrollment> courseEnrollmentRequestStateStore;
 
     private ReadOnlyKeyValueStore<String, Course> getCourseStateStore() {
         if (this.courseStateStore == null)
@@ -42,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
         return this.chapterStateStore;
     }
 
-    private ReadOnlyKeyValueStore<String, CourseEnrollmentRequest> getCourseEnrollmentRequestStateStore() {
+    private ReadOnlyKeyValueStore<String, CourseEnrollment> getCourseEnrollmentRequestStateStore() {
         if(this.courseEnrollmentRequestStateStore == null)
             this.courseEnrollmentRequestStateStore = interactiveQueryService.getQueryableStore(this.courseEnrollmentRequestStateStoreName , QueryableStoreTypes.keyValueStore());
         return this.courseEnrollmentRequestStateStore;
@@ -84,7 +84,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Mono<Boolean> createCourseRequest(CourseEnrollment enrollment) {
+    public Mono<Boolean> createCourseRequest(CourseEnrollmentRequest enrollment) {
         return this.kafkaService.sendEnrollmentRequest(Mono.just(enrollment));
     }
 
@@ -103,10 +103,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Flux<CourseEnrollment> getCourseEnrollment(String courseId) {
-        Optional<CourseEnrollmentRequest> optionalCourseEnrollmentRequest = Optional.ofNullable(this.getCourseEnrollmentRequestStateStore().get(courseId));
+    public Flux<CourseEnrollmentRequest> getCourseEnrollment(String courseId) {
+        Optional<CourseEnrollment> optionalCourseEnrollmentRequest = Optional.ofNullable(this.getCourseEnrollmentRequestStateStore().get(courseId));
         if (optionalCourseEnrollmentRequest.isEmpty()) return Flux.empty();
-        return Flux.fromIterable(optionalCourseEnrollmentRequest.get().getCourseEnrollments());
+        return Flux.fromIterable(optionalCourseEnrollmentRequest.get().getCourseEnrollmentRequests());
     }
 
     @Override

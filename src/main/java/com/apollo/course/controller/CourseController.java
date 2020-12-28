@@ -33,7 +33,7 @@ public class CourseController {
     }
 
     @GetMapping("/enroll/requests/{courseId}")
-    public Flux<CourseEnrollment> getCourseEnrollment(@PathVariable("courseId") String courseId) {
+    public Flux<CourseEnrollmentRequest> getCourseEnrollment(@PathVariable("courseId") String courseId) {
         return this.courseService.getCourseEnrollment(courseId);
     }
 
@@ -43,8 +43,8 @@ public class CourseController {
     }
 
     @PostMapping("/enroll")
-    public Mono<Boolean> createEnrollment(@RequestBody CourseEnrollment courseEnrollment) {
-        return this.courseService.createCourseRequest(courseEnrollment);
+    public Mono<Boolean> createEnrollment(@RequestBody CourseEnrollmentRequest courseEnrollmentRequest) {
+        return this.courseService.createCourseRequest(courseEnrollmentRequest);
     }
 
     @PutMapping(value = "/")

@@ -2,17 +2,14 @@ package com.apollo.course.model;
 
 import lombok.Data;
 
-import java.util.HashSet;
+import java.util.Calendar;
+import java.util.Date;
 
 @Data
 public class CourseEnrollmentRequest {
 
-    private String courseId;
-    private HashSet<CourseEnrollment> courseEnrollments = new HashSet<>();
-
-    public CourseEnrollmentRequest addCourseEnrollment(CourseEnrollment courseEnrollment) {
-        this.courseEnrollments.add(courseEnrollment);
-        return this;
-    }
+    private String courseId , userId;
+    private Date requestDateOfCreation = Calendar.getInstance().getTime();
+    private EnrollmentType enrollmentType;
 
 }
