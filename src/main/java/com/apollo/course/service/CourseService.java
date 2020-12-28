@@ -12,7 +12,7 @@ public interface CourseService {
 
     Flux<Lecture> getChapterLectures(String chapterId);
 
-    Flux<CourseEnrollment> getCourseEnrollment(String courseId);
+    Flux<CourseEnrollmentRequest> getCourseEnrollment(String courseId);
 
     Mono<Boolean> updateCourse(Mono<Course> courseMono);
 
@@ -32,5 +32,5 @@ public interface CourseService {
 
     Mono<Boolean> addLectureToChapter(Mono<Lecture> lectureMono , String courseId , String chapterId);
 
-    Mono<Boolean> createCourseRequest(CourseEnrollment enrollment);
+    Mono<Boolean> createCourseRequest(CourseEnrollmentRequest enrollment);
 }

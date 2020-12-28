@@ -24,7 +24,7 @@ public class CourseProcessors {
     private String courseEnrollmentStateStoreName;
 
     @Bean
-    public BiFunction<KStream<String, Course>, KStream<String, CourseEnrollment>, KTable<String, Course>> courseProcessor() {
+    public BiFunction<KStream<String, Course>, KStream<String, CourseEnrollmentRequest>, KTable<String, Course>> courseProcessor() {
         return (courseKStream , courseEnrollmentKStream) -> {
             courseKStream
                     .flatMap((courseId , course) -> course.getCourseMembers().stream().map(memberId -> new KeyValue<String, Course>(memberId , course)).collect(Collectors.toSet()))
@@ -41,12 +41,12 @@ public class CourseProcessors {
 
             courseEnrollmentKStream
                     .groupByKey(Grouped.with(Serdes.String() , CustomSerdes.courseEnrollmentSerde()))
-                    .aggregate(CourseEnrollmentRequest::new ,
-                            (courseId , courseEnrollment , courseEnrollmentRequest) -> courseEnrollmentRequest.addCourseEnrollment(courseEnrollment) ,
+                    .aggregate(CourseEnrollment::new ,
+                            (courseId , courseEnrollment , courseEnrollmentA) -> courseEnrollmentA.addCourseEnrollment(courseEnrollment) ,
                             Materialized.with(Serdes.String() , CustomSerdes.courseEnrollmentRequestSerde()))
                     .toStream()
                     .groupByKey(Grouped.with(Serdes.String() , CustomSerdes.courseEnrollmentRequestSerde()))
-                    .reduce((courseEnrollmentRequest , courseEnrollmentRequestUpdate) -> courseEnrollmentRequestUpdate , Materialized.as(this.courseEnrollmentStateStoreName));
+                    .reduce((courseEnrollment , courseEnrollmentUpdate) -> courseEnrollmentUpdate , Materialized.as(this.courseEnrollmentStateStoreName));
 
             return courseKStream.groupByKey().reduce((course , updatedCourse) -> updatedCourse , Materialized.as(this.courseStateStoreName));
         };
