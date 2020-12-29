@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Optional;
 import java.util.Set;
 
 @RestController
@@ -19,7 +18,7 @@ public class CourseController {
 
     @GetMapping(value = "/{courseId}")
     public Mono<Course> getCourseById(@PathVariable("courseId") String courseId) {
-        return this.courseService.getCourseById(courseId).map(Optional::get);
+        return this.courseService.getCourseById(courseId).flatMap(Mono::justOrEmpty);
     }
 
     @GetMapping("/chapter/{courseId}")
@@ -39,7 +38,7 @@ public class CourseController {
 
     @PostMapping("/")
     public Mono<Course> createCourse(@RequestBody Course course) {
-        return this.courseService.saveCourse(Mono.just(course)).map(Optional::get);
+        return this.courseService.saveCourse(Mono.just(course)).flatMap(Mono::justOrEmpty);
     }
 
     @PostMapping("/enroll")
