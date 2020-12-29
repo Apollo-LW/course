@@ -72,9 +72,9 @@ public class CourseController {
         return this.courseService.addChapter(chapterMono , courseId , ownerId);
     }
 
-    @PutMapping("/add/lecture/{courseId}/{chapterId}")
-    public Mono<Boolean> addLectureToChapter(@PathVariable("chapterId") String chapterId , @PathVariable("courseId") String courseId , @RequestBody Mono<Lecture> lectureMono) {
-        return this.courseService.addLectureToChapter(lectureMono , courseId , chapterId);
+    @PutMapping("/add/lecture/{courseId}/{ownerId}/{chapterId}")
+    public Mono<Boolean> addLectureToChapter(@PathVariable("chapterId") String chapterId , @PathVariable("ownerId") String ownerId , @PathVariable("courseId") String courseId , @RequestBody Mono<Lecture> lectureMono) {
+        return this.courseService.addLectureToChapter(lectureMono , courseId , ownerId , chapterId);
     }
 
     @DeleteMapping("/")

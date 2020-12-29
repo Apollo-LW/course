@@ -30,7 +30,7 @@ public interface CourseService {
 
     Mono<Boolean> addChapter(Mono<Chapter> chapterMono , String courseId , String ownerId);
 
-    Mono<Boolean> addLectureToChapter(Mono<Lecture> lectureMono , String courseId , String chapterId);
+    Mono<Boolean> addLectureToChapter(Mono<Lecture> lectureMono , String courseId , String ownerId , String chapterId);
 
     Mono<Boolean> createCourseRequest(CourseEnrollmentRequest enrollment);
 }
