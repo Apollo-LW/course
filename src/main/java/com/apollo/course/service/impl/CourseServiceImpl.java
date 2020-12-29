@@ -70,13 +70,14 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Mono<Boolean> addLectureToChapter(Mono<Lecture> lectureMono , String courseId , String chapterId) {
+    public Mono<Boolean> addLectureToChapter(Mono<Lecture> lectureMono , String courseId , String ownerId , String chapterId) {
         Optional<Chapter> optionalChapter = Optional.ofNullable(this.getChapterStateStore().get(chapterId));
         if (optionalChapter.isEmpty()) return Mono.just(false);
         Optional<Course> optionalCourse = Optional.ofNullable(this.getCourseStateStore().get(courseId));
         if(optionalCourse.isEmpty()) return Mono.just(false);
         Chapter chapter = optionalChapter.get();
         Course course = optionalCourse.get();
+        if(course.doesNotHaveOwner(ownerId)) return Mono.just(false);
         Optional<Chapter> courseChapter = course.getChapter(chapter);
         if(courseChapter.isEmpty()) return Mono.just(false);
         course.removeChapter(chapter);
