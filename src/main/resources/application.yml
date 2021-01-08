@@ -30,7 +30,7 @@ course:
 spring:
   cloud:
     function:
-      definition: courseProcessor;
+      definition: courseProcessor;courseUserProcessor;courseEnrollmentRequest
     stream:
       kafka:
         streams:
@@ -38,8 +38,11 @@ spring:
             application-id: apollo-course
       bindings:
         courseProcessor-in-0.destination: course
-        courseProcessor-in-1.destination: enroll-request
         courseProcessor-out-0.destination: course-state-store
+        courseUserProcessor-in-0.destination: course
+        courseUserProcessor-out-0.destination: course-user-state-store
+        courseEnrollmentRequest-in-0.destination: enroll-request
+        courseEnrollmentRequest-out-0.destination: enroll-request-store
 
 server:
   port: 8081
