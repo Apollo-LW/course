@@ -13,7 +13,7 @@ public class Course {
     private HashSet<Chapter> courseChapters = new HashSet<>();
     private Date courseDateOfCreation = Calendar.getInstance().getTime();
     private HashSet<String> courseOwners = new HashSet<>() , courseMembers = new HashSet<>();
-    private String courseName = this.courseId + '-' + this.courseDateOfCreation , courseType , courseDescription , courseCategory;
+    private String courseName = this.courseId + '-' + this.courseDateOfCreation , courseType = "" , courseDescription = "" , courseCategory = "";
 
     public boolean doesNotHaveOwner(String ownerId) {
         return !this.courseOwners.contains(ownerId);
