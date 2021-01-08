@@ -9,7 +9,7 @@ public class Course {
 
     private boolean isPublic, isActive = true;
     private EnrollmentType courseEnrollmentType = EnrollmentType.PUBLIC;
-    private String courseId =  UUID.randomUUID().toString();
+    private String courseId =  UUID.randomUUID().toString() , roomId = "";
     private HashSet<Chapter> courseChapters = new HashSet<>();
     private Date courseDateOfCreation = Calendar.getInstance().getTime();
     private HashSet<String> courseOwners = new HashSet<>() , courseMembers = new HashSet<>();
