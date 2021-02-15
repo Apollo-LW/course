@@ -23,6 +23,12 @@ public class Course {
         return this.courseChapters.stream().filter(chapterTemp -> chapterTemp.getChapterId().equals(chapter.getChapterId())).findFirst();
     }
 
+    public Set<String> getAllCourseMembers() {
+        HashSet<String> allCourseMembers = new HashSet<>(this.courseMembers);
+        allCourseMembers.addAll(this.courseOwners);
+        return allCourseMembers;
+    }
+
     public void removeChapter(Chapter chapter) {
         this.courseChapters.remove(chapter);
     }

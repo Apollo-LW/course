@@ -30,16 +30,28 @@ course:
 spring:
   cloud:
     function:
-      definition: courseProcessor;
+      definition: courseProcessorState;courseMember;courseChapter;courseEnrollment
     stream:
       kafka:
         streams:
           binder:
-            application-id: apollo-course
+            functions:
+              courseProcessorState:
+                application-id: apollo-course
+              courseMember:
+                application-id: apollo-course-member
+              courseChapter:
+                application-id: apollo-course-chapter
+              courseEnrollment:
+                application-id: apollo-course-enrollment
       bindings:
-        courseProcessor-in-0.destination: course
-        courseProcessor-in-1.destination: enroll-request
-        courseProcessor-out-0.destination: course-state-store
-
+        courseProcessorState-in-0.destination: ${course.kafka.topic}
+        courseProcessorState-out-0.destination: ${course.kafka.store}
+        courseMember-in-0.destination: ${course.kafka.topic}
+        courseMember-out-0.destination: ${user.kafka.store}
+        courseChapter-in-0.destination: ${course.kafka.topic}
+        courseChapter-out-0.destination: ${chapter.kafka.store}
+        courseEnrollment-in-0.destination: ${course.kafka.enroll.topic}
+        courseEnrollment-out-0.destination: ${course.kafka.enroll.store}
 server:
   port: 8081
