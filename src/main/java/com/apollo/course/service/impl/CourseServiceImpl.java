@@ -37,13 +37,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private ReadOnlyKeyValueStore<String, Chapter> getChapterStateStore() {
-        if(this.chapterStateStore == null)
+        if (this.chapterStateStore == null)
             this.chapterStateStore = interactiveQueryService.getQueryableStore(this.chapterStateStoreName , QueryableStoreTypes.keyValueStore());
         return this.chapterStateStore;
     }
 
     private ReadOnlyKeyValueStore<String, CourseEnrollment> getCourseEnrollmentRequestStateStore() {
-        if(this.courseEnrollmentRequestStateStore == null)
+        if (this.courseEnrollmentRequestStateStore == null)
             this.courseEnrollmentRequestStateStore = interactiveQueryService.getQueryableStore(this.courseEnrollmentRequestStateStoreName , QueryableStoreTypes.keyValueStore());
         return this.courseEnrollmentRequestStateStore;
     }
@@ -65,7 +65,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Mono<Boolean> addChapter(Mono<Chapter> chapterMono , String courseId , String ownerId) {
         Optional<Course> optionalCourse = Optional.ofNullable(this.getCourseStateStore().get(courseId));
-        if(this.isNotValid(optionalCourse , ownerId)) return Mono.just(false);
+        if (this.isNotValid(optionalCourse , ownerId)) return Mono.just(false);
         return chapterMono.flatMap(chapter -> this.kafkaService.sendCourseRecord(Mono.just(optionalCourse.get().addChapter(chapter))).map(Optional::isPresent));
     }
 
@@ -74,12 +74,12 @@ public class CourseServiceImpl implements CourseService {
         Optional<Chapter> optionalChapter = Optional.ofNullable(this.getChapterStateStore().get(chapterId));
         if (optionalChapter.isEmpty()) return Mono.just(false);
         Optional<Course> optionalCourse = Optional.ofNullable(this.getCourseStateStore().get(courseId));
-        if(optionalCourse.isEmpty()) return Mono.just(false);
+        if (optionalCourse.isEmpty()) return Mono.just(false);
         Chapter chapter = optionalChapter.get();
         Course course = optionalCourse.get();
-        if(course.doesNotHaveOwner(ownerId)) return Mono.just(false);
+        if (course.doesNotHaveOwner(ownerId)) return Mono.just(false);
         Optional<Chapter> courseChapter = course.getChapter(chapter);
-        if(courseChapter.isEmpty()) return Mono.just(false);
+        if (courseChapter.isEmpty()) return Mono.just(false);
         course.removeChapter(chapter);
         return lectureMono.flatMap(lecture -> this.kafkaService.sendCourseRecord(Mono.just(course.addChapter(chapter.addLecture(lecture)))).map(Optional::isPresent));
     }
@@ -99,7 +99,7 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public Flux<Lecture> getChapterLectures(String chapterId) {
         Optional<Chapter> optionalChapter = Optional.ofNullable(this.getChapterStateStore().get(chapterId));
-        if(optionalChapter.isEmpty()) return Flux.empty();
+        if (optionalChapter.isEmpty()) return Flux.empty();
         return Flux.fromIterable(optionalChapter.get().getChapterLectures());
     }
 

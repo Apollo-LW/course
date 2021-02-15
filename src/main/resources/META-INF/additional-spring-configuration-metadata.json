@@ -88,6 +88,24 @@
       "type": "java.lang.String",
       "defaultValue": "user-state-store",
       "description": "The name of the user state store."
+    },
+    {
+      "name": "course.kafka.enroll.topic",
+      "type": "java.lang.String",
+      "defaultValue": "enroll-request",
+      "description": "Topic name for the enrollment."
+    },
+    {
+      "name": "course.kafka.enroll.store",
+      "type": "java.lang.String",
+      "defaultValue": "enroll-request-store",
+      "description": "Topic name for the enrollment store."
+    },
+    {
+      "name": "chapter.kafka.store",
+      "type": "java.lang.String",
+      "defaultValue": "course-chapter-state-store",
+      "description": "Topic name for the chapter store."
     }
   ]
 }
