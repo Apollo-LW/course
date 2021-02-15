@@ -56,12 +56,12 @@ public class CourseHandler {
     }
 
     public @NotNull Mono<ServerResponse> createCourse(ServerRequest request) {
-        Mono<Course> courseMono = request.bodyToMono(Course.class);
-        courseMono = this.courseService.saveCourse(courseMono).flatMap(Mono::justOrEmpty);
+        final Mono<Course> courseMono = request.bodyToMono(Course.class);
+        Mono<Course> createdCourseMono = this.courseService.saveCourse(courseMono).flatMap(Mono::justOrEmpty);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(courseMono , Course.class);
+                .body(createdCourseMono , Course.class);
     }
 
     public @NotNull Mono<ServerResponse> createCourseEnrollment(ServerRequest request) {
@@ -111,7 +111,7 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> addLectureToChapter(ServerRequest request) {
         final Mono<ChapterLecture> chapterLectureMono = request.bodyToMono(ChapterLecture.class);
-        Mono<Boolean> isLectureAdded = this.courseService.addLectureToChapter(chapterLectureMono);
+        final Mono<Boolean> isLectureAdded = this.courseService.addLectureToChapter(chapterLectureMono);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +120,7 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> deleteCourse(ServerRequest request) {
         final Mono<ShareCourse> shareCourseMono = request.bodyToMono(ShareCourse.class);
-        Mono<Boolean> isDeleted = this.courseService.deleteCourse(shareCourseMono);
+        final Mono<Boolean> isDeleted = this.courseService.deleteCourse(shareCourseMono);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
