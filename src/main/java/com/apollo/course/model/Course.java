@@ -33,13 +33,21 @@ public class Course {
         this.courseChapters.remove(chapter);
     }
 
-    public Course addMember(String membersId) {
-        this.courseMembers.add(membersId);
+    public Course addMember(String memberId) {
+        this.courseMembers.add(memberId);
         return this;
     }
 
-    public Course addOwners(String ownersId) {
-        this.courseOwners.add(ownersId);
+    public Boolean addMembers(HashSet<String> membersIds) {
+        return this.courseMembers.addAll(membersIds);
+    }
+
+    public Boolean addOwners(HashSet<String> ownersIds) {
+        return this.courseOwners.addAll(ownersIds);
+    }
+
+    public Course addOwner(String ownerId) {
+        this.courseOwners.add(ownerId);
         return this;
     }
 
