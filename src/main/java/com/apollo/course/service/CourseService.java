@@ -12,7 +12,7 @@ public interface CourseService {
 
     Flux<Lecture> getChapterLectures(String chapterId);
 
-    Flux<CourseEnrollmentRequest> getCourseEnrollment(String courseId);
+    Flux<CourseEnrollmentRequest> getCourseEnrollmentRequests(String courseId , String ownerId);
 
     Mono<Boolean> updateCourse(Mono<Course> courseMono);
 
@@ -22,15 +22,13 @@ public interface CourseService {
 
     Mono<Boolean> deleteCourse(Mono<ShareCourse> modifyCourseMono);
 
-    Mono<Boolean> shareCourse(Mono<ShareCourse> modifyCourseMono , boolean flag);
+    Mono<Boolean> addOwners(Mono<ShareCourse> shareCourseMono);
 
-    Mono<Boolean> addOwners(Flux<String> ownersIds , String courseId , String ownerId);
+    Mono<Boolean> addMembers(Mono<ShareCourse> shareCourseMono);
 
-    Mono<Boolean> addMembers(Flux<String> membersIds , String courseId , String ownerId);
+    Mono<Boolean> addChapter(Mono<CourseChapter> courseChapterMono);
 
-    Mono<Boolean> addChapter(Mono<Chapter> chapterMono , String courseId , String ownerId);
+    Mono<Boolean> addLectureToChapter(Mono<ChapterLecture> chapterLectureMono);
 
-    Mono<Boolean> addLectureToChapter(Mono<Lecture> lectureMono , String courseId , String ownerId , String chapterId);
-
-    Mono<Boolean> createCourseRequest(CourseEnrollmentRequest enrollment);
+    Mono<Boolean> createCourseEnrollmentRequest(Mono<CourseEnrollmentRequest> enrollmentRequestMono);
 }
