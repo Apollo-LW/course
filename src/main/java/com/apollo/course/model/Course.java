@@ -19,10 +19,6 @@ public class Course {
         return !this.courseOwners.contains(ownerId);
     }
 
-    public Optional<Chapter> getChapter(Chapter chapter) {
-        return this.courseChapters.stream().filter(chapterTemp -> chapterTemp.getChapterId().equals(chapter.getChapterId())).findFirst();
-    }
-
     public Set<String> getAllCourseMembers() {
         HashSet<String> allCourseMembers = new HashSet<>(this.courseMembers);
         allCourseMembers.addAll(this.courseOwners);
@@ -33,22 +29,12 @@ public class Course {
         this.courseChapters.remove(chapter);
     }
 
-    public Course addMember(String memberId) {
-        this.courseMembers.add(memberId);
-        return this;
-    }
-
-    public Boolean addMembers(HashSet<String> membersIds) {
+    public Boolean addMembers(Set<String> membersIds) {
         return this.courseMembers.addAll(membersIds);
     }
 
-    public Boolean addOwners(HashSet<String> ownersIds) {
+    public Boolean addOwners(Set<String> ownersIds) {
         return this.courseOwners.addAll(ownersIds);
-    }
-
-    public Course addOwner(String ownerId) {
-        this.courseOwners.add(ownerId);
-        return this;
     }
 
     public Course addChapter(Chapter chapters) {
@@ -56,4 +42,11 @@ public class Course {
         return this;
     }
 
+    public Boolean removeMembers(HashSet<String> membersIds) {
+        return this.courseMembers.removeAll(membersIds);
+    }
+
+    public Boolean removeOwners(Set<String> ownersIds) {
+        return this.courseOwners.removeAll(ownersIds);
+    }
 }

@@ -63,17 +63,19 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Mono<Boolean> addChapter(Mono<CourseChapter> courseChapterMono) {
+    public Mono<Boolean> addChapter(Mono<CourseChapter> courseChapterMono , Boolean isAdd) {
         return courseChapterMono.flatMap(courseChapter ->
                 this.getCourseById(courseChapter.getCourseId()).flatMap(courseOptional -> {
                     if (this.isNotValid(courseOptional , courseChapter.getOwnerId())) return Mono.just(false);
-                    Course course = courseOptional.get().addChapter(courseChapter.getChapter());
+                    Course course = courseOptional.get();
+                    if (isAdd) course.addChapter(courseChapter.getChapter());
+                    else course.removeChapter(courseChapter.getChapter());
                     return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
                 }));
     }
 
     @Override
-    public Mono<Boolean> addLectureToChapter(Mono<ChapterLecture> chapterLectureMono) {
+    public Mono<Boolean> addLectureToChapter(Mono<ChapterLecture> chapterLectureMono , Boolean isAdd) {
         return chapterLectureMono.flatMap(chapterLecture ->
                 this.getCourseById(chapterLecture.getCourseId()).flatMap(courseOptional -> {
                     if (this.isNotValid(courseOptional , chapterLecture.getOwnerId())) return Mono.just(false);
@@ -82,7 +84,8 @@ public class CourseServiceImpl implements CourseService {
                     if (chapterOptional.isEmpty()) return Mono.just(false);
                     Chapter chapter = chapterOptional.get();
                     course.removeChapter(chapter);
-                    chapter.addLecture(chapterLecture.getLecture());
+                    if (isAdd) chapter.addLecture(chapterLecture.getLecture());
+                    else chapter.removeLecture(chapterLecture.getLecture());
                     course.addChapter(chapter);
                     return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
                 }));
@@ -119,18 +122,16 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Mono<Boolean> updateCourse(Mono<Course> courseMono) {
-        return courseMono.flatMap(course -> {
-            Optional<Course> courseOptional = Optional.ofNullable(this.courseStateStore.get(course.getCourseId()));
-            if (courseOptional.isEmpty()) return Mono.empty();
+        return courseMono.flatMap(course -> this.getCourseById(course.getCourseId()).flatMap(courseOptional -> {
+            if (courseOptional.isEmpty()) return Mono.just(false);
             Course updatedCourse = courseOptional.get();
-            if (!updatedCourse.isActive()) return Mono.empty();
             updatedCourse.setCourseType(course.getCourseType());
             updatedCourse.setCourseName(course.getCourseName());
-            updatedCourse.setCourseMembers(course.getCourseMembers());
-            updatedCourse.setCourseOwners(course.getCourseOwners());
-            updatedCourse.setCourseChapters(course.getCourseChapters());
-            return this.kafkaService.sendCourseRecord(courseMono).map(Optional::isPresent);
-        });
+            updatedCourse.setCourseDescription(course.getCourseDescription());
+            updatedCourse.setCourseCategory(course.getCourseCategory());
+            updatedCourse.setCourseType(course.getCourseType());
+            return this.kafkaService.sendCourseRecord(Mono.just(updatedCourse)).map(Optional::isPresent);
+        }));
     }
 
     @Override
@@ -147,23 +148,29 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Mono<Boolean> addMembers(Mono<ShareCourse> shareCourseMono) {
+    public Mono<Boolean> addMembers(Mono<ShareCourse> shareCourseMono , Boolean isAdd) {
         return shareCourseMono.flatMap(shareCourse ->
                 this.getCourseById(shareCourse.getCourseId()).flatMap(courseOptional -> {
                     if (this.isNotValid(courseOptional , shareCourse.getOwnerId())) return Mono.just(false);
                     Course course = courseOptional.get();
-                    return Mono.just(course.addMembers(shareCourse.getUserIds()));
+                    Boolean isAdded = false;
+                    if (isAdd) isAdded = course.addMembers(shareCourse.getUserIds());
+                    else isAdded = course.removeMembers(shareCourse.getUserIds());
+                    return Mono.just(isAdded);
                 })
         );
     }
 
     @Override
-    public Mono<Boolean> addOwners(Mono<ShareCourse> shareCourseMono) {
+    public Mono<Boolean> addOwners(Mono<ShareCourse> shareCourseMono , Boolean isAdd) {
         return shareCourseMono.flatMap(shareCourse ->
                 this.getCourseById(shareCourse.getCourseId()).flatMap(courseOptional -> {
                     if (this.isNotValid(courseOptional , shareCourse.getOwnerId())) return Mono.just(false);
                     Course course = courseOptional.get();
-                    return Mono.just(course.addOwners(shareCourse.getUserIds()));
+                    Boolean isAdded = false;
+                    if (isAdd) isAdded = course.addOwners(shareCourse.getUserIds());
+                    else isAdded = course.removeOwners(shareCourse.getUserIds());
+                    return Mono.just(isAdded);
                 }));
     }
 }

@@ -18,9 +18,12 @@ public class Chapter {
         return this;
     }
 
-    public Chapter addLecture(Lecture lecture) {
+    public void addLecture(Lecture lecture) {
         this.chapterLectures.add(lecture);
-        return this;
+    }
+
+    public void removeLecture(Lecture lecture) {
+        this.chapterLectures.remove(lecture);
     }
 
 }

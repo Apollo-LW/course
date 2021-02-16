@@ -22,13 +22,13 @@ public interface CourseService {
 
     Mono<Boolean> deleteCourse(Mono<ShareCourse> modifyCourseMono);
 
-    Mono<Boolean> addOwners(Mono<ShareCourse> shareCourseMono);
+    Mono<Boolean> addOwners(Mono<ShareCourse> shareCourseMono , Boolean isAdd);
 
-    Mono<Boolean> addMembers(Mono<ShareCourse> shareCourseMono);
+    Mono<Boolean> addMembers(Mono<ShareCourse> shareCourseMono , Boolean isAdd);
 
-    Mono<Boolean> addChapter(Mono<CourseChapter> courseChapterMono);
+    Mono<Boolean> addChapter(Mono<CourseChapter> courseChapterMono , Boolean isAdd);
 
-    Mono<Boolean> addLectureToChapter(Mono<ChapterLecture> chapterLectureMono);
+    Mono<Boolean> addLectureToChapter(Mono<ChapterLecture> chapterLectureMono , Boolean isAdd);
 
     Mono<Boolean> createCourseEnrollmentRequest(Mono<CourseEnrollmentRequest> enrollmentRequestMono);
 }

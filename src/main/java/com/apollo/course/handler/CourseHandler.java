@@ -84,7 +84,8 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> addOwnerToCourse(ServerRequest request) {
         final Mono<ShareCourse> shareCourseMono = request.bodyToMono(ShareCourse.class);
-        final Mono<Boolean> isOwnersAdded = this.courseService.addOwners(shareCourseMono);
+        final Boolean isAdd = Boolean.valueOf(request.pathVariable(RoutingConstant.FLAG));
+        final Mono<Boolean> isOwnersAdded = this.courseService.addOwners(shareCourseMono , isAdd);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -93,7 +94,8 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> addMembersToCourse(ServerRequest request) {
         final Mono<ShareCourse> shareCourseMono = request.bodyToMono(ShareCourse.class);
-        final Mono<Boolean> isMembersAdded = this.courseService.addMembers(shareCourseMono);
+        final Boolean isAdd = Boolean.valueOf(request.pathVariable(RoutingConstant.FLAG));
+        final Mono<Boolean> isMembersAdded = this.courseService.addMembers(shareCourseMono , isAdd);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -102,7 +104,8 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> addChapterToCourse(ServerRequest request) {
         final Mono<CourseChapter> courseChapterMono = request.bodyToMono(CourseChapter.class);
-        final Mono<Boolean> isChapterAdded = this.courseService.addChapter(courseChapterMono);
+        final Boolean isAdd = Boolean.valueOf(request.pathVariable(RoutingConstant.FLAG));
+        final Mono<Boolean> isChapterAdded = this.courseService.addChapter(courseChapterMono , isAdd);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +114,8 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> addLectureToChapter(ServerRequest request) {
         final Mono<ChapterLecture> chapterLectureMono = request.bodyToMono(ChapterLecture.class);
-        final Mono<Boolean> isLectureAdded = this.courseService.addLectureToChapter(chapterLectureMono);
+        final Boolean isAdd = Boolean.valueOf(request.pathVariable(RoutingConstant.FLAG));
+        final Mono<Boolean> isLectureAdded = this.courseService.addLectureToChapter(chapterLectureMono , isAdd);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
@@ -125,5 +129,10 @@ public class CourseHandler {
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(isDeleted , Boolean.class);
+    }
+
+    public @NotNull Mono<ServerResponse> test(ServerRequest request) {
+        Mono<CourseChapter> courseChapterMono = request.bodyToMono(CourseChapter.class);
+        return ServerResponse.ok().contentType(MediaType.APPLICATION_JSON).body(courseChapterMono , CourseChapter.class);
     }
 }
