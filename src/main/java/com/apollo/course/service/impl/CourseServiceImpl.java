@@ -49,15 +49,15 @@ public class CourseServiceImpl implements CourseService {
     }
 
     private boolean isNotValid(final Optional<Course> optionalCourse , final String ownerId) {
-        return optionalCourse.isEmpty() || optionalCourse.get().doesNotHaveOwner(ownerId);
+        return optionalCourse.isEmpty() || !optionalCourse.get().isActive() || optionalCourse.get().doesNotHaveOwner(ownerId);
     }
 
     @Override
     public Mono<Optional<Course>> getCourseById(final String courseId) {
         return Mono.just(Optional.ofNullable(this.getCourseStateStore().get(courseId))).flatMap(courseOptional -> {
-            if (courseOptional.isEmpty()) return Mono.empty();
+            if (courseOptional.isEmpty()) return Mono.just(Optional.empty());
             Course course = courseOptional.get();
-            if (!course.isActive()) return Mono.empty();
+            if (!course.isActive()) return Mono.just(Optional.empty());
             return Mono.just(Optional.of(course));
         });
     }
