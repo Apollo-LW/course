@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class CourseRouterConfig {
 
     @Bean
-    public RouterFunction<ServerResponse> routeCourse(CourseHandler courseHandler) {
+    public RouterFunction<ServerResponse> routeCourse(final CourseHandler courseHandler) {
         return RouterFunctions
                 .route()
                 .path(RoutingConstant.COURSE_PATH , routeFunctionBuilder ->
@@ -27,10 +27,10 @@ public class CourseRouterConfig {
                                         .POST(courseHandler::createCourse)
                                         .POST(RoutingConstant.COURSE_ENROLL_REQUEST , courseHandler::createCourseEnrollment)
                                         .PUT(courseHandler::updateCourse)
-                                        .PUT(RoutingConstant.ADD_OWNER , courseHandler::addOwnerToCourse)
-                                        .PUT(RoutingConstant.ADD_MEMBER , courseHandler::addMembersToCourse)
-                                        .PUT(RoutingConstant.ADD_CHAPTER , courseHandler::addChapterToCourse)
-                                        .PUT(RoutingConstant.ADD_LECTURE , courseHandler::addLectureToChapter)
+                                        .PATCH(RoutingConstant.ADD_OWNER , courseHandler::addOwnerToCourse)
+                                        .PATCH(RoutingConstant.ADD_MEMBER , courseHandler::addMembersToCourse)
+                                        .PATCH(RoutingConstant.ADD_LECTURE , courseHandler::addLectureToChapter)
+                                        .PATCH(RoutingConstant.ADD_CHAPTER , courseHandler::addChapterToCourse)
                                         .DELETE(courseHandler::deleteCourse)))
                 .build();
     }

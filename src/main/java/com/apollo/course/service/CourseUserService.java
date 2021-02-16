@@ -5,6 +5,6 @@ import reactor.core.publisher.Flux;
 
 public interface CourseUserService {
 
-    Flux<Course> getUserCourses(String userId);
+    Flux<Course> getUserCourses(final String userId);
 
 }
