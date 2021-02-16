@@ -15,10 +15,6 @@ public class Course {
     private HashSet<String> courseOwners = new HashSet<>(), courseMembers = new HashSet<>();
     private String courseName = this.courseId + '-' + this.courseDateOfCreation, courseType, courseDescription, courseCategory, courseRoomId;
 
-    public boolean doesNotHaveOwner(String ownerId) {
-        return !this.courseOwners.contains(ownerId);
-    }
-
     public Set<String> getAllCourseMembers() {
         HashSet<String> allCourseMembers = new HashSet<>(this.courseMembers);
         allCourseMembers.addAll(this.courseOwners);
@@ -37,9 +33,8 @@ public class Course {
         return this.courseOwners.addAll(ownersIds);
     }
 
-    public Course addChapter(Chapter chapters) {
+    public void addChapter(Chapter chapters) {
         this.courseChapters.add(chapters);
-        return this;
     }
 
     public Boolean removeMembers(HashSet<String> membersIds) {
@@ -48,5 +43,9 @@ public class Course {
 
     public Boolean removeOwners(Set<String> ownersIds) {
         return this.courseOwners.removeAll(ownersIds);
+    }
+
+    public Boolean doesNotHaveOwner(String ownerId) {
+        return !this.courseOwners.contains(ownerId);
     }
 }

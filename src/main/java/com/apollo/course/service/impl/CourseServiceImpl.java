@@ -54,7 +54,12 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Mono<Optional<Course>> getCourseById(final String courseId) {
-        return Mono.just(Optional.ofNullable(this.getCourseStateStore().get(courseId)));
+        return Mono.just(Optional.ofNullable(this.getCourseStateStore().get(courseId))).flatMap(courseOptional -> {
+            if (courseOptional.isEmpty()) return Mono.empty();
+            Course course = courseOptional.get();
+            if (!course.isActive()) return Mono.empty();
+            return Mono.just(Optional.of(course));
+        });
     }
 
     @Override
@@ -98,9 +103,10 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public Flux<Chapter> getCourseChapters(final String courseId) {
-        Optional<Course> optionalCourse = Optional.ofNullable(this.getCourseStateStore().get(courseId));
-        if (optionalCourse.isEmpty()) return Flux.empty();
-        return Flux.fromIterable(optionalCourse.get().getCourseChapters());
+        return this.getCourseById(courseId).flatMapMany(courseOptional -> {
+            if (courseOptional.isEmpty()) return Flux.empty();
+            return Flux.fromIterable(courseOptional.get().getCourseChapters());
+        });
     }
 
     @Override
@@ -135,16 +141,13 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Mono<Boolean> deleteCourse(final Mono<ShareCourse> modifyCourseMono) {
-        return modifyCourseMono.flatMap(shareCourse -> {
-            Optional<Course> courseOptional = Optional.ofNullable(this.getCourseStateStore().get(shareCourse.getCourseId()));
-            if (courseOptional.isEmpty()) return Mono.just(false);
-            return Mono.just(courseOptional.get()).flatMap(course -> {
-                if (course.doesNotHaveOwner(shareCourse.getOwnerId())) return Mono.just(false);
-                course.setActive(false);
-                return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
-            });
-        });
+    public Mono<Boolean> deleteCourse(final Mono<ShareCourse> shareCourseMono) {
+        return shareCourseMono.flatMap(shareCourse -> this.getCourseById(shareCourse.getCourseId()).flatMap(courseOptional -> {
+            if (this.isNotValid(courseOptional , shareCourse.getOwnerId())) return Mono.just(false);
+            Course course = courseOptional.get();
+            course.setActive(false);
+            return this.kafkaService.sendCourseRecord(Mono.just(course)).map(Optional::isPresent);
+        }));
     }
 
     @Override
