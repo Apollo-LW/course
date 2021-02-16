@@ -14,7 +14,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 public class CourseUserRouterConfig {
 
     @Bean
-    public RouterFunction<ServerResponse> routeCourseUser(CourseUserHandler courseUserHandler) {
+    public RouterFunction<ServerResponse> routeCourseUser(final CourseUserHandler courseUserHandler) {
         return RouterFunctions
                 .route()
                 .path(RoutingConstant.COURSE_USER_PATH , routeFunctionBuilder ->

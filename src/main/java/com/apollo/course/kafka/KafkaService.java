@@ -23,14 +23,14 @@ public class KafkaService {
     private final KafkaSender<String, Course> courseKafkaSender;
     private final KafkaSender<String, CourseEnrollmentRequest> courseEnrollmentKafkaSender;
 
-    public Mono<Optional<Course>> sendCourseRecord(Mono<Course> courseMono) {
+    public Mono<Optional<Course>> sendCourseRecord(final Mono<Course> courseMono) {
         return courseMono.flatMap(course -> this.courseKafkaSender
                 .send(Mono.just(SenderRecord.create(new ProducerRecord<String, Course>(this.courseTopicName , course.getCourseId() , course) , course.getCourseId())))
                 .next()
                 .map(senderResult -> senderResult.exception() == null ? Optional.of(course) : Optional.empty()));
     }
 
-    public Mono<Boolean> sendEnrollmentRequest(Mono<CourseEnrollmentRequest> courseEnrollmentMono) {
+    public Mono<Boolean> sendEnrollmentRequest(final Mono<CourseEnrollmentRequest> courseEnrollmentMono) {
         return courseEnrollmentMono.flatMap(courseEnrollment -> this.courseEnrollmentKafkaSender
                 .send(Mono.just(SenderRecord.create(new ProducerRecord<String, CourseEnrollmentRequest>(this.courseEnrollmentTopicName , courseEnrollment.getCourseId() , courseEnrollment) , courseEnrollment.getCourseId())))
                 .next()

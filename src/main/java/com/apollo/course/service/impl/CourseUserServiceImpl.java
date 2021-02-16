@@ -29,9 +29,9 @@ public class CourseUserServiceImpl implements CourseUserService {
     }
 
     @Override
-    public Flux<Course> getUserCourses(String userId) {
+    public Flux<Course> getUserCourses(final String userId) {
         Optional<CourseUser> optionalCourseUser = Optional.ofNullable(this.getCourseUserStateStore().get(userId));
-        if(optionalCourseUser.isEmpty()) return Flux.empty();
+        if (optionalCourseUser.isEmpty()) return Flux.empty();
         return Flux.fromIterable(optionalCourseUser.get().getUserCourses());
     }
 }
