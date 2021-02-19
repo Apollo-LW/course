@@ -8,4 +8,5 @@ public class ChapterLecture {
     private String courseId, ownerId, chapterId;
     private Lecture lecture;
 
+
 }

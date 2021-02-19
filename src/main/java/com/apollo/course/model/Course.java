@@ -48,4 +48,17 @@ public class Course {
     public Boolean doesNotHaveOwner(String ownerId) {
         return !this.courseOwners.contains(ownerId);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Course course = (Course) o;
+        return Objects.equals(courseId , course.courseId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(courseId);
+    }
 }
