@@ -3,6 +3,7 @@ package com.apollo.course.model;
 import lombok.Data;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.UUID;
 
 @Data
@@ -26,4 +27,16 @@ public class Chapter {
         this.chapterLectures.remove(lecture);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Chapter chapter = (Chapter) o;
+        return Objects.equals(chapterId , chapter.chapterId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chapterId);
+    }
 }
