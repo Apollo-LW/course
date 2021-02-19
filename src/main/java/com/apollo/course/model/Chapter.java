@@ -1,30 +1,32 @@
 package com.apollo.course.model;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 public class Chapter {
 
-    private String chapterName;
-    private String chapterId = UUID.randomUUID().toString();
-    private HashSet<Lecture> chapterLectures = new HashSet<>();
-    private HashSet<Resource> chapterResources = new HashSet<>();
+    private final String chapterId = UUID.randomUUID().toString();
+    private @NotNull @NotEmpty String chapterName;
+    private Set<String> chapterLecturesIds = new HashSet<>();
+    private Set<String> chapterResourcesIds = new HashSet<>();
 
-    public Chapter addResource(Resource resource) {
-        this.chapterResources.add(resource);
-        return this;
+    public void addResource(final String resourceId) {
+        this.chapterLecturesIds.add(resourceId);
     }
 
-    public void addLecture(Lecture lecture) {
-        this.chapterLectures.add(lecture);
+    public void addLecture(final String lectureId) {
+        this.chapterLecturesIds.add(lectureId);
     }
 
-    public void removeLecture(Lecture lecture) {
-        this.chapterLectures.remove(lecture);
+    public void removeLecture(final String lectureId) {
+        this.chapterLecturesIds.remove(lectureId);
     }
 
     @Override

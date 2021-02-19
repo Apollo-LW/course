@@ -5,6 +5,5 @@ import lombok.Data;
 @Data
 public class CourseChapter {
 
-    private String courseId, ownerId;
-    private Chapter chapter;
+    private final String courseId, ownerId, chapterId;
 }

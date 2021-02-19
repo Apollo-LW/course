@@ -1,23 +1,21 @@
 package com.apollo.course.model;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 
 @Data
 public class Lecture {
 
-    private String ownerId;
+    private final @NotNull @NotEmpty String ownerId;
+    private final String lectureId = UUID.randomUUID().toString();
+    private Set<String> lectureResourcesIds = new HashSet<>();
     private boolean isPublic, isActive = true;
-    private String lectureId = UUID.randomUUID().toString();
-    private HashSet<Resource> lectureResources = new HashSet<>();
-
-    public Lecture addResource(Resource resource) {
-        this.lectureResources.add(resource);
-        return this;
-    }
 
     @Override
     public boolean equals(Object o) {

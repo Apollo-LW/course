@@ -7,8 +7,8 @@ import java.util.Objects;
 @Data
 public class Resource {
 
-    private String resourceId, resourceUrl;
-    private ResourceType resourceType;
+    private final String resourceId, resourceUrl;
+    private final ResourceType resourceType;
 
     @Override
     public boolean equals(Object o) {

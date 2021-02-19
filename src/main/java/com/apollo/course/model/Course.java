@@ -1,28 +1,28 @@
 package com.apollo.course.model;
 
 import lombok.Data;
+import org.jetbrains.annotations.NotNull;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.*;
 
 @Data
 public class Course {
 
-    private boolean isPublic, isActive = true;
+    private final String courseId = UUID.randomUUID().toString();
     private EnrollmentType courseEnrollmentType = EnrollmentType.PUBLIC;
-    private String courseId = UUID.randomUUID().toString();
-    private HashSet<Chapter> courseChapters = new HashSet<>();
+    private @NotNull @NotEmpty String courseName = this.courseId + '-' + this.courseDateOfCreation;
+    private @NotNull @NotEmpty String courseType;
+    private @NotNull @NotEmpty String courseDescription;
+    private @NotNull @NotEmpty String courseCategory;
+    private @NotNull @NotEmpty String courseRoomId;
+    private Set<String> courseChaptersIds = new HashSet<>();
     private Date courseDateOfCreation = Calendar.getInstance().getTime();
-    private HashSet<String> courseOwners = new HashSet<>(), courseMembers = new HashSet<>();
-    private String courseName = this.courseId + '-' + this.courseDateOfCreation, courseType, courseDescription, courseCategory, courseRoomId;
+    private Set<String> courseOwners = new HashSet<>(), courseMembers = new HashSet<>();
+    private boolean isPublic, isActive = true;
 
-    public Set<String> getAllCourseMembers() {
-        HashSet<String> allCourseMembers = new HashSet<>(this.courseMembers);
-        allCourseMembers.addAll(this.courseOwners);
-        return allCourseMembers;
-    }
-
-    public void removeChapter(Chapter chapter) {
-        this.courseChapters.remove(chapter);
+    public void removeChapter(String chapterId) {
+        this.courseChaptersIds.remove(chapterId);
     }
 
     public Boolean addMembers(Set<String> membersIds) {
@@ -33,11 +33,11 @@ public class Course {
         return this.courseOwners.addAll(ownersIds);
     }
 
-    public void addChapter(Chapter chapters) {
-        this.courseChapters.add(chapters);
+    public void addChapter(String chapterId) {
+        this.courseChaptersIds.add(chapterId);
     }
 
-    public Boolean removeMembers(HashSet<String> membersIds) {
+    public Boolean removeMembers(Set<String> membersIds) {
         return this.courseMembers.removeAll(membersIds);
     }
 
@@ -47,6 +47,12 @@ public class Course {
 
     public Boolean doesNotHaveOwner(String ownerId) {
         return !this.courseOwners.contains(ownerId);
+    }
+
+    public Set<String> getAllCourseMembers() {
+        HashSet<String> allCourseMembers = new HashSet<>(this.courseMembers);
+        allCourseMembers.addAll(this.courseOwners);
+        return allCourseMembers;
     }
 
     @Override

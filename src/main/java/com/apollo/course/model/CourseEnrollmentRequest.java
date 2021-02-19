@@ -8,8 +8,8 @@ import java.util.Date;
 @Data
 public class CourseEnrollmentRequest {
 
-    private String courseId, userId, ownerId;
-    private Date requestDateOfCreation = Calendar.getInstance().getTime();
-    private EnrollmentType enrollmentType;
+    private final String courseId, userId, ownerId;
+    private final Date requestDateOfCreation = Calendar.getInstance().getTime();
+    private final EnrollmentType enrollmentType;
 
 }
