@@ -1,9 +1,9 @@
 package com.apollo.course.model;
 
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @Data
@@ -21,31 +21,19 @@ public class Course {
     private Set<String> courseOwners = new HashSet<>(), courseMembers = new HashSet<>();
     private boolean isPublic, isActive = true;
 
-    public void removeChapter(String chapterId) {
-        this.courseChaptersIds.remove(chapterId);
+    public boolean modifyChapter(String chapterId , boolean isAdd) {
+        return isAdd ? this.courseChaptersIds.add(chapterId) : this.courseChaptersIds.remove(chapterId);
     }
 
-    public Boolean addMembers(Set<String> membersIds) {
-        return this.courseMembers.addAll(membersIds);
+    public boolean modifyMembers(Set<String> membersIds , boolean isAdd) {
+        return isAdd ? this.courseMembers.addAll(membersIds) : this.courseMembers.removeAll(membersIds);
     }
 
-    public Boolean addOwners(Set<String> ownersIds) {
-        return this.courseOwners.addAll(ownersIds);
+    public boolean modifyOwners(Set<String> ownerIds , boolean isAdd) {
+        return isAdd ? this.courseOwners.addAll(ownerIds) : this.courseOwners.removeAll(ownerIds);
     }
 
-    public void addChapter(String chapterId) {
-        this.courseChaptersIds.add(chapterId);
-    }
-
-    public Boolean removeMembers(Set<String> membersIds) {
-        return this.courseMembers.removeAll(membersIds);
-    }
-
-    public Boolean removeOwners(Set<String> ownersIds) {
-        return this.courseOwners.removeAll(ownersIds);
-    }
-
-    public Boolean doesNotHaveOwner(String ownerId) {
+    public boolean doesNotHaveOwner(String ownerId) {
         return !this.courseOwners.contains(ownerId);
     }
 

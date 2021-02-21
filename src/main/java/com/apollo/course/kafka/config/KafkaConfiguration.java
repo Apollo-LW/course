@@ -1,4 +1,4 @@
-package com.apollo.course.kafka;
+package com.apollo.course.kafka.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
@@ -30,8 +30,10 @@ public class KafkaConfiguration {
     private String bootstrapServer;
     @Value("${course.kafka.topic}")
     private String courseTopicName;
-    @Value("${course.kafka.enroll.topic}")
+    @Value("${enroll.kafka.topic}")
     private String courseEnrollTopicName;
+    @Value("${chapter.kafka.topic}")
+    private String chapterTopicName;
     @Value("${course.kafka.partitions}")
     private Integer numberOfPartitions;
     @Value("${course.kafka.replicas}")
@@ -50,10 +52,6 @@ public class KafkaConfiguration {
     private String linger;
     @Value("${course.kafka.max-in-flight}")
     private String maxInFlight;
-    @Value("${course.kafka.client-id}")
-    private String clientId;
-    @Value("${course.kafka.group-id}")
-    private String groupId;
     @Value("${course.kafka.offset}")
     private String offsetConfig;
 
@@ -70,7 +68,17 @@ public class KafkaConfiguration {
     @Bean
     NewTopic createCourseEnrollmentTopic() {
         return TopicBuilder
-                .name(this.courseTopicName)
+                .name(this.courseEnrollTopicName)
+                .partitions(this.numberOfPartitions)
+                .replicas(this.numberOfReplicas)
+                .config(TopicConfig.RETENTION_MS_CONFIG , this.retentionPeriod)
+                .build();
+    }
+
+    @Bean
+    NewTopic createChapterTopic() {
+        return TopicBuilder
+                .name(this.chapterTopicName)
                 .partitions(this.numberOfPartitions)
                 .replicas(this.numberOfReplicas)
                 .config(TopicConfig.RETENTION_MS_CONFIG , this.retentionPeriod)

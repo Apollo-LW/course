@@ -4,7 +4,13 @@ user:
 
 chapter:
   kafka:
+    topic: chapter
     store: course-chapter-state-store
+
+enroll:
+  kafka:
+    topic: enroll-request
+    store: enroll-request-store
 
 course:
   kafka:
@@ -20,38 +26,36 @@ course:
     batch: 163850
     linger: 100
     max-in-flight: 1
-    client-id: apollo-course
-    group-id: apollo-course-group
     offset: latest
-    enroll:
-      topic: enroll-request
-      store: enroll-request-store
 
 spring:
   cloud:
     function:
-      definition: courseProcessorState;courseMember;courseChapter;courseEnrollment
+      definition: courseProcessorState;courseChapter
     stream:
       kafka:
+        binder:
+          auto-create-topics: false
         streams:
           binder:
             functions:
               courseProcessorState:
                 application-id: apollo-course
-              courseMember:
-                application-id: apollo-course-member
+              #              courseMember:
+              #                application-id: apollo-course-member
               courseChapter:
                 application-id: apollo-course-chapter
-              courseEnrollment:
-                application-id: apollo-course-enrollment
+      #              courseEnrollment:
+      #                application-id: apollo-course-enrollment
       bindings:
         courseProcessorState-in-0.destination: ${course.kafka.topic}
         courseProcessorState-out-0.destination: ${course.kafka.store}
-        courseMember-in-0.destination: ${course.kafka.topic}
-        courseMember-out-0.destination: ${user.kafka.store}
+        #        courseMember-in-0.destination: ${course.kafka.topic}
+        #        courseMember-out-0.destination: ${user.kafka.store}
         courseChapter-in-0.destination: ${course.kafka.topic}
+        courseChapter-in-1.destination: ${chapter.kafka.topic}
         courseChapter-out-0.destination: ${chapter.kafka.store}
-        courseEnrollment-in-0.destination: ${course.kafka.enroll.topic}
-        courseEnrollment-out-0.destination: ${course.kafka.enroll.store}
+#        courseEnrollment-in-0.destination: ${enroll.kafka.topic}
+#        courseEnrollment-out-0.destination: ${enroll.kafka.store}
 server:
   port: 8081

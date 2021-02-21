@@ -22,15 +22,15 @@ public class CourseRouterConfig {
                                 builder -> builder
                                         .GET(RoutingConstant.COURSE_ID_PATH , courseHandler::getCourseById)
                                         .GET(RoutingConstant.COURSE_CHAPTERS , courseHandler::getCourseChapters)
-                                        .GET(RoutingConstant.CHAPTER_LECTURES , courseHandler::getChapterLectures)
+/*                                        .GET(RoutingConstant.CHAPTER_LECTURES , courseHandler::getChapterLectures)*/
                                         .GET(RoutingConstant.COURSE_ENROLLMENT , courseHandler::getCourseEnrollment)
                                         .POST(courseHandler::createCourse)
-                                        .POST(RoutingConstant.COURSE_ENROLL_REQUEST , courseHandler::createCourseEnrollment)
+/*                                        .POST(RoutingConstant.COURSE_ENROLL_REQUEST , courseHandler::createCourseEnrollment)*/
                                         .PUT(courseHandler::updateCourse)
-                                        .PATCH(RoutingConstant.ADD_OWNER , courseHandler::addOwnerToCourse)
-                                        .PATCH(RoutingConstant.ADD_MEMBER , courseHandler::addMembersToCourse)
-                                        .PATCH(RoutingConstant.ADD_LECTURE , courseHandler::addLectureToChapter)
-                                        .PATCH(RoutingConstant.ADD_CHAPTER , courseHandler::addChapterToCourse)
+                                        .PATCH(RoutingConstant.ADD_OWNER , courseHandler::modifyCourseOwners)
+                                        .PATCH(RoutingConstant.ADD_MEMBER , courseHandler::modifyCourseMembers)
+/*                                        .PATCH(RoutingConstant.ADD_LECTURE , courseHandler::modifyChapterLectures)*/
+                                        .PATCH(RoutingConstant.ADD_CHAPTER , courseHandler::modifyCourseChapter)
                                         .DELETE(courseHandler::deleteCourse)))
                 .build();
     }

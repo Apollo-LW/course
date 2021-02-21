@@ -1,9 +1,9 @@
 package com.apollo.course.model;
 
 import lombok.Data;
-import org.jetbrains.annotations.NotNull;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -12,13 +12,19 @@ import java.util.UUID;
 @Data
 public class Chapter {
 
+    private final @NotNull @NotEmpty String chapterOwnerId;
     private final String chapterId = UUID.randomUUID().toString();
     private @NotNull @NotEmpty String chapterName;
     private Set<String> chapterLecturesIds = new HashSet<>();
     private Set<String> chapterResourcesIds = new HashSet<>();
+    private boolean isActive = true;
 
     public void addResource(final String resourceId) {
-        this.chapterLecturesIds.add(resourceId);
+        this.chapterResourcesIds.add(resourceId);
+    }
+
+    public void removeResource(final String resourceId) {
+        this.chapterResourcesIds.add(resourceId);
     }
 
     public void addLecture(final String lectureId) {
@@ -27,6 +33,10 @@ public class Chapter {
 
     public void removeLecture(final String lectureId) {
         this.chapterLecturesIds.remove(lectureId);
+    }
+
+    public boolean doesNotHaveOwner(final String ownerId) {
+        return !this.chapterOwnerId.equals(ownerId);
     }
 
     @Override

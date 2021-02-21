@@ -8,27 +8,21 @@ import java.util.Optional;
 
 public interface CourseService {
 
-    Flux<Chapter> getCourseChapters(final String courseId);
-
-    Flux<Lecture> getChapterLectures(final String chapterId);
-
-    Flux<CourseEnrollmentRequest> getCourseEnrollmentRequests(final String courseId , final String ownerId);
-
-    Mono<Boolean> updateCourse(final Mono<Course> courseMono);
+    Mono<Optional<Course>> saveCourse(final Mono<Course> courseMono);
 
     Mono<Optional<Course>> getCourseById(final String courseId);
 
-    Mono<Optional<Course>> saveCourse(final Mono<Course> courseMono);
+    Mono<Boolean> updateCourse(final Mono<Course> courseMono);
 
     Mono<Boolean> deleteCourse(final Mono<ShareCourse> modifyCourseMono);
 
-    Mono<Boolean> addOwners(final Mono<ShareCourse> shareCourseMono , final Boolean isAdd);
+    Mono<Boolean> modifyOwners(final Mono<ShareCourse> shareCourseMono , final boolean isAdd);
 
-    Mono<Boolean> addMembers(final Mono<ShareCourse> shareCourseMono , final Boolean isAdd);
+    Mono<Boolean> modifyMembers(final Mono<ShareCourse> shareCourseMono , final boolean isAdd);
 
-    Mono<Boolean> addChapter(final Mono<CourseChapter> courseChapterMono , final Boolean isAdd);
+    Mono<Boolean> modifyChapters(final Mono<ModifyChapter> courseChapterMono , final boolean isAdd);
 
-    Mono<Boolean> addLectureToChapter(final Mono<ChapterLecture> chapterLectureMono , final Boolean isAdd);
+    Flux<Chapter> getCourseChapters(final String courseId);
 
-    Mono<Boolean> createCourseEnrollmentRequest(final Mono<CourseEnrollmentRequest> enrollmentRequestMono);
+    Flux<CourseEnrollmentRequest> getCourseEnrollmentRequests(final String courseId , final String ownerId);
 }

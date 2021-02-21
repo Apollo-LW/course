@@ -1,4 +1,4 @@
-package com.apollo.course.kafka;
+package com.apollo.course.kafka.serde;
 
 import com.apollo.course.model.*;
 import org.apache.kafka.common.serialization.Serde;

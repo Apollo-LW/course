@@ -18,9 +18,9 @@ public class CourseUserHandler {
 
     private final CourseUserService courseUserService;
 
-    public @NotNull Mono<ServerResponse> getUserCourses(ServerRequest request) {
+    public @NotNull Mono<ServerResponse> getUserCourses(final ServerRequest request) {
         final String userId = request.pathVariable(RoutingConstant.USER_ID);
-        Flux<Course> courseFlux = this.courseUserService.getUserCourses(userId);
+        final Flux<Course> courseFlux = this.courseUserService.getUserCourses(userId);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
