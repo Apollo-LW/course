@@ -8,7 +8,11 @@ import java.util.Set;
 @Data
 public class CourseUser {
 
-    private final String userId;
-    private final Set<Course> userCourses = new HashSet<>();
+    private final Set<String> userCourses = new HashSet<>();
+    private String userId;
 
+    public CourseUser addCourse(final String courseId) {
+        this.userCourses.add(courseId);
+        return this;
+    }
 }
