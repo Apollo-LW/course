@@ -12,9 +12,10 @@ import java.util.UUID;
 @Data
 public class Chapter {
 
-    private final @NotNull @NotEmpty String chapterOwnerId;
-    private final String chapterId = UUID.randomUUID().toString();
+    private @NotNull @NotEmpty String chapterOwnerId;
     private @NotNull @NotEmpty String chapterName;
+    private @NotNull @NotEmpty String chapterCourseId;
+    private final String chapterId = UUID.randomUUID().toString();
     private Set<String> chapterLecturesIds = new HashSet<>();
     private Set<String> chapterResourcesIds = new HashSet<>();
     private boolean isActive = true;

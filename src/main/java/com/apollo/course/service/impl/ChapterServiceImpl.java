@@ -20,7 +20,7 @@ public class ChapterServiceImpl implements ChapterService {
 
     private final KafkaChapterService kafkaChapterService;
     private final InteractiveQueryService interactiveQueryService;
-    @Value("${chapter.kafka.topic}")
+    @Value("${chapter.kafka.store}")
     private String chapterTopicName;
     private ReadOnlyKeyValueStore<String, Chapter> chapterStateStore;
 

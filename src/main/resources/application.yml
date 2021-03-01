@@ -31,7 +31,7 @@ course:
 spring:
   cloud:
     function:
-      definition: courseProcessorState;courseChapter
+      definition: courseProcessorState;courseChapter;
     stream:
       kafka:
         binder:
@@ -41,21 +41,21 @@ spring:
             functions:
               courseProcessorState:
                 application-id: apollo-course
-              #              courseMember:
-              #                application-id: apollo-course-member
+              courseMember:
+                application-id: apollo-course-member
               courseChapter:
                 application-id: apollo-course-chapter
-      #              courseEnrollment:
-      #                application-id: apollo-course-enrollment
+              courseEnrollment:
+                application-id: apollo-course-enrollment
       bindings:
         courseProcessorState-in-0.destination: ${course.kafka.topic}
         courseProcessorState-out-0.destination: ${course.kafka.store}
-        #        courseMember-in-0.destination: ${course.kafka.topic}
-        #        courseMember-out-0.destination: ${user.kafka.store}
+        courseMember-in-0.destination: ${course.kafka.topic}
+        courseMember-out-0.destination: ${user.kafka.store}
         courseChapter-in-0.destination: ${course.kafka.topic}
         courseChapter-in-1.destination: ${chapter.kafka.topic}
         courseChapter-out-0.destination: ${chapter.kafka.store}
-#        courseEnrollment-in-0.destination: ${enroll.kafka.topic}
-#        courseEnrollment-out-0.destination: ${enroll.kafka.store}
+        courseEnrollment-in-0.destination: ${enroll.kafka.topic}
+        courseEnrollment-out-0.destination: ${enroll.kafka.store}
 server:
   port: 8081

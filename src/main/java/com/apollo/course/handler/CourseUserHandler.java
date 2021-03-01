@@ -1,7 +1,6 @@
 package com.apollo.course.handler;
 
 import com.apollo.course.constant.RoutingConstant;
-import com.apollo.course.model.Course;
 import com.apollo.course.service.CourseUserService;
 import lombok.RequiredArgsConstructor;
 import org.jetbrains.annotations.NotNull;
@@ -20,11 +19,11 @@ public class CourseUserHandler {
 
     public @NotNull Mono<ServerResponse> getUserCourses(final ServerRequest request) {
         final String userId = request.pathVariable(RoutingConstant.USER_ID);
-        final Flux<Course> courseFlux = this.courseUserService.getUserCourses(userId);
+        final Flux<String> courseFlux = this.courseUserService.getUserCourses(userId);
         return ServerResponse
                 .ok()
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(courseFlux , Course.class);
+                .body(courseFlux , String.class);
     }
 
 }

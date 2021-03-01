@@ -1,9 +1,7 @@
 package com.apollo.course.kafka.processor;
 
-import com.apollo.course.kafka.serde.CustomSerdes;
 import com.apollo.course.model.Chapter;
 import com.apollo.course.model.Course;
-import com.apollo.course.model.CourseChapter;
 import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.kstream.Grouped;
@@ -24,20 +22,22 @@ public class CourseChapterProcessor {
     private String courseChapterStateStoreName;
 
     @Bean
-    public BiFunction<KStream<String, Course>, KStream<String, Chapter>, KTable<String, CourseChapter>> courseChapter() {
+    public BiFunction<KStream<String, Course>, KStream<String, Chapter>, KTable<String, Chapter>> courseChapter() {
         return (courseKStream , chapterKStream) -> {
-            final KTable<String, Course> courseKTable = courseKStream.flatMap((courseId , course) -> course
+            final KTable<String, String> courseKTable = courseKStream.flatMap((courseId , course) -> course
                     .getCourseChaptersIds()
                     .stream()
-                    .map(chapterId -> new KeyValue<String, Course>(chapterId , course))
+                    .map(chapterId -> new KeyValue<String, String>(chapterId , course.getCourseId()))
                     .collect(Collectors.toSet()))
-                    .groupByKey(Grouped.with(Serdes.String() , CustomSerdes.courseSerde()))
-                    .reduce((course , updatedCourse) -> updatedCourse , Materialized.with(Serdes.String() , CustomSerdes.courseSerde()));
-            final KTable<String, Chapter> chapterKTable = chapterKStream
-                    .groupByKey()
-                    .reduce((chapter , updatedChapter) -> updatedChapter , Materialized.with(Serdes.String() , CustomSerdes.chapterSerde()));
+                    .groupByKey(Grouped.with(Serdes.String() , Serdes.String()))
+                    .reduce((course , updatedCourse) -> updatedCourse , Materialized.with(Serdes.String() , Serdes.String()));
 
-            return null;
+            final KTable<String, String> chapterKTable = chapterKStream
+                    .map((chapterId , chapter) -> new KeyValue<String, String>(chapterId , chapterId))
+                    .groupByKey(Grouped.with(Serdes.String() , Serdes.String()))
+                    .reduce((chapter , updatedChapter) -> updatedChapter , Materialized.with(Serdes.String() , Serdes.String()));
+
+            return chapterKStream.groupByKey().reduce((chapter , updatedChapter) -> updatedChapter , Materialized.as(this.courseChapterStateStoreName));
         };
     }
 

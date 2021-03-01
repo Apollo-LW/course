@@ -1,6 +1,5 @@
 package com.apollo.course.service.impl;
 
-import com.apollo.course.model.Course;
 import com.apollo.course.model.CourseUser;
 import com.apollo.course.service.CourseUserService;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +28,7 @@ public class CourseUserServiceImpl implements CourseUserService {
     }
 
     @Override
-    public Flux<Course> getUserCourses(final String userId) {
+    public Flux<String> getUserCourses(final String userId) {
         Optional<CourseUser> optionalCourseUser = Optional.ofNullable(this.getCourseUserStateStore().get(userId));
         if (optionalCourseUser.isEmpty()) return Flux.empty();
         return Flux.fromIterable(optionalCourseUser.get().getUserCourses());
