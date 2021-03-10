@@ -31,7 +31,7 @@ course:
 spring:
   cloud:
     function:
-      definition: courseProcessorState;courseChapter;
+      definition: courseProcessorState;courseChapter;courseMember;courseEnrollment
     stream:
       kafka:
         binder:

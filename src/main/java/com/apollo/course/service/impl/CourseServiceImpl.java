@@ -76,11 +76,12 @@ public class CourseServiceImpl implements CourseService {
         return courseMono.flatMap(course -> this.getCourseById(course.getCourseId()).flatMap(courseOptional -> {
             if (courseOptional.isEmpty()) return Mono.just(false);
             Course updatedCourse = courseOptional.get();
-            updatedCourse.setCourseType(course.getCourseType());
-            updatedCourse.setCourseName(course.getCourseName());
-            updatedCourse.setCourseDescription(course.getCourseDescription());
-            updatedCourse.setCourseCategory(course.getCourseCategory());
-            updatedCourse.setCourseType(course.getCourseType());
+            if (course.getCourseType() != null) updatedCourse.setCourseType(course.getCourseType());
+            if (course.getCourseName() != null) updatedCourse.setCourseName(course.getCourseName());
+            if (course.getCourseDescription() != null)
+                updatedCourse.setCourseDescription(course.getCourseDescription());
+            if (course.getCourseCategory() != null) updatedCourse.setCourseCategory(course.getCourseCategory());
+            if (course.getCourseType() != null) updatedCourse.setCourseType(course.getCourseType());
             return this.kafkaCourseService.sendCourseRecord(Mono.just(updatedCourse)).map(Optional::isPresent);
         }));
     }

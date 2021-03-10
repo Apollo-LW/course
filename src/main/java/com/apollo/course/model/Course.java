@@ -11,13 +11,13 @@ public class Course {
 
     private final String courseId = UUID.randomUUID().toString();
     private EnrollmentType courseEnrollmentType = EnrollmentType.PUBLIC;
-    private @NotNull @NotEmpty String courseName = this.courseId + '-' + this.courseDateOfCreation;
+    private Date courseDateOfCreation = Calendar.getInstance().getTime();
+    private @NotNull @NotEmpty String courseName = this.courseId + '-' + this.courseDateOfCreation.toString().replaceAll(" " , "");
     private @NotNull @NotEmpty String courseType;
     private @NotNull @NotEmpty String courseDescription;
     private @NotNull @NotEmpty String courseCategory;
     private @NotNull @NotEmpty String courseRoomId;
     private Set<String> courseChaptersIds = new HashSet<>();
-    private Date courseDateOfCreation = Calendar.getInstance().getTime();
     private Set<String> courseOwners = new HashSet<>(), courseMembers = new HashSet<>();
     private boolean isPublic, isActive = true;
 

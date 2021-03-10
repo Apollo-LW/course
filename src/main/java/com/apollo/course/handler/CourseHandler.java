@@ -66,7 +66,7 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> modifyCourseOwners(final ServerRequest request) {
         final Mono<ShareCourse> shareCourseMono = request.bodyToMono(ShareCourse.class);
-        final Boolean isAdd = Boolean.valueOf(request.pathVariable(RoutingConstant.FLAG));
+        final boolean isAdd = Boolean.parseBoolean(request.pathVariable(RoutingConstant.FLAG));
         final Mono<Boolean> isOwnersAdded = this.courseService.modifyOwners(shareCourseMono , isAdd);
         return ServerResponse
                 .ok()
@@ -76,7 +76,7 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> modifyCourseMembers(final ServerRequest request) {
         final Mono<ShareCourse> shareCourseMono = request.bodyToMono(ShareCourse.class);
-        final Boolean isAdd = Boolean.valueOf(request.pathVariable(RoutingConstant.FLAG));
+        final boolean isAdd = Boolean.parseBoolean(request.pathVariable(RoutingConstant.FLAG));
         final Mono<Boolean> isMembersAdded = this.courseService.modifyMembers(shareCourseMono , isAdd);
         return ServerResponse
                 .ok()
@@ -86,7 +86,7 @@ public class CourseHandler {
 
     public @NotNull Mono<ServerResponse> modifyCourseChapter(final ServerRequest request) {
         final Mono<ModifyChapter> courseChapterMono = request.bodyToMono(ModifyChapter.class);
-        final Boolean isAdd = Boolean.valueOf(request.pathVariable(RoutingConstant.FLAG));
+        final boolean isAdd = Boolean.parseBoolean(request.pathVariable(RoutingConstant.FLAG));
         final Mono<Boolean> isChapterAdded = this.courseService.modifyChapters(courseChapterMono , isAdd);
         return ServerResponse
                 .ok()
