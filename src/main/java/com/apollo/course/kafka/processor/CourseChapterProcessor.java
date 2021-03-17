@@ -8,7 +8,6 @@ import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
 import org.apache.kafka.streams.kstream.Materialized;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +16,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseChapterProcessor {
-
-    @Value("${chapter.kafka.store}")
-    private String courseChapterStateStoreName;
 
     @Bean
     public BiFunction<KStream<String, Course>, KStream<String, Chapter>, KTable<String, Chapter>> courseChapter() {
@@ -37,7 +33,7 @@ public class CourseChapterProcessor {
                     .groupByKey(Grouped.with(Serdes.String() , Serdes.String()))
                     .reduce((chapter , updatedChapter) -> updatedChapter , Materialized.with(Serdes.String() , Serdes.String()));
 
-            return chapterKStream.groupByKey().reduce((chapter , updatedChapter) -> updatedChapter , Materialized.as(this.courseChapterStateStoreName));
+            return null;
         };
     }
 

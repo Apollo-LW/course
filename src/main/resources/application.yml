@@ -5,7 +5,7 @@ user:
 chapter:
   kafka:
     topic: chapter
-    store: course-chapter-state-store
+    store: chapter-state-store
 
 enroll:
   kafka:
@@ -31,7 +31,7 @@ course:
 spring:
   cloud:
     function:
-      definition: courseProcessorState;courseChapter;courseMember;courseEnrollment
+      definition: courseProcessorState;courseChapter;courseMember;courseEnrollment;chapterProcessorState;
     stream:
       kafka:
         binder:
@@ -47,9 +47,13 @@ spring:
                 application-id: apollo-course-chapter
               courseEnrollment:
                 application-id: apollo-course-enrollment
+              chapterProcessorState:
+                application-id: apollo-chapter
       bindings:
         courseProcessorState-in-0.destination: ${course.kafka.topic}
         courseProcessorState-out-0.destination: ${course.kafka.store}
+        chapterProcessorState-in-0.destination: ${chapter.kafka.topic}
+        chapterProcessorState-out-0.destination: ${chapter.kafka.store}
         courseMember-in-0.destination: ${course.kafka.topic}
         courseMember-out-0.destination: ${user.kafka.store}
         courseChapter-in-0.destination: ${course.kafka.topic}

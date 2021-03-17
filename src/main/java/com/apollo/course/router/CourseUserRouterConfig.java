@@ -1,4 +1,4 @@
-package com.apollo.course.config;
+package com.apollo.course.router;
 
 import com.apollo.course.constant.RoutingConstant;
 import com.apollo.course.handler.CourseUserHandler;
